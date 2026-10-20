@@ -34,7 +34,6 @@ export type Action =
   | "account:guests"
   | "account:audit" // read the audit log
   | "account:security"
-  | "account:billing"
   | "account:export" // export boards / account data
   | "workspace:create"
   | "workspace:view"
@@ -61,7 +60,6 @@ export const CAPABILITIES: { key: Action; group: "account" | "content"; labelKey
   { key: "account:guests", group: "account", labelKey: "admin.cap.account:guests" },
   { key: "account:audit", group: "account", labelKey: "admin.cap.account:audit" },
   { key: "account:security", group: "account", labelKey: "admin.cap.account:security" },
-  { key: "account:billing", group: "account", labelKey: "admin.cap.account:billing" },
   { key: "account:export", group: "account", labelKey: "admin.cap.account:export" },
   { key: "workspace:create", group: "content", labelKey: "admin.cap.workspace:create" },
   { key: "workspace:create_board", group: "content", labelKey: "admin.cap.workspace:create_board" },

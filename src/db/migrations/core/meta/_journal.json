@@ -8,6 +8,13 @@
       "when": 1791315513209,
       "tag": "0000_core_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1792492045638,
+      "tag": "0001_drop_account_plan",
+      "breakpoints": true
     }
   ]
 }

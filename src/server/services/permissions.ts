@@ -38,7 +38,12 @@ const roleInput = z.object({
 export function listRoles(actor: Actor): AccountRole[] {
   assertCan(actor, "account:invite");
   const counts = new Map(db.select({ id: userRoles.roleId, n: sql<number>`count(*)` }).from(userRoles).groupBy(userRoles.roleId).all().map((r) => [r.id, r.n]));
-  return db.select().from(accountRoles).where(eq(accountRoles.accountId, actor.accountId)).orderBy(asc(accountRoles.name)).all().map((r) => ({ ...r, userCount: counts.get(r.id) ?? 0 }));
+  return db.select().from(accountRoles).where(eq(accountRoles.accountId, actor.accountId)).orderBy(asc(accountRoles.name)).all().map((r) => ({ ...r, capabilities: knownCaps(r.capabilities), userCount: counts.get(r.id) ?? 0 }));
+}
+
+/** Drops capabilities that no longer exist (e.g. the removed account:billing), so saving an older role keeps working. */
+function knownCaps(caps: Record<string, boolean>): Record<string, boolean> {
+  return Object.fromEntries(Object.entries(caps).filter(([k]) => (capKeys as string[]).includes(k)));
 }
 
 export function createRole(actor: Actor, input: unknown): AccountRole {

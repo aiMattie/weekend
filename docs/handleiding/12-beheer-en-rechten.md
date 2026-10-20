@@ -60,7 +60,6 @@ Instellingen op dezelfde pagina:
 
 - **Gasten toestaan**: zet je dit uit, dan kun je geen gasten meer uitnodigen.
 - **Gasten zien alleen vrijgegeven views**: een board owner kiest welke views een gast ziet.
-- **Gastenlimiet**: het aantal gasten hangt af van je plan (gasten per seat; standaard onbeperkt).
 
 ## 5. Eigen rollen
 

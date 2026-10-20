@@ -45,8 +45,6 @@ export interface AccountSettings {
   microsoftSso: { enabled: boolean };
   scim: { tokenHash: string; prefix: string; createdAt: string } | null;
   retentionDays: number;
-  /** per plan limit overrides (null = unlimited) */
-  planOverrides: Record<string, number | null>;
   importConnections: ImportConnections;
 }
 
@@ -64,7 +62,6 @@ export const DEFAULT_SETTINGS: AccountSettings = {
   microsoftSso: { enabled: true },
   scim: null,
   retentionDays: 365,
-  planOverrides: {},
   importConnections: {
     monday: { apiKey: null, accountName: null, connectedAt: null, connectedBy: null, schedule: { ...SCHEDULE_OFF, workspaces: [] } },
   },

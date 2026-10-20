@@ -52,9 +52,6 @@
 .matrix td:first-child, .matrix th:first-child { text-align: left; }
 .yes { color: #00a05a; font-weight: 700; }
 .no { color: #b0b4c4; }
-.meter { height: 8px; border-radius: 4px; background: #e6e9ef; overflow: hidden; width: 100%; }
-.meterFill { height: 100%; background: #0073ea; }
-.meterFull { background: #df2f4a; }
 .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
 @media (max-width: 900px) { .split { grid-template-columns: 1fr; } .side { display: none; } .content { padding: 20px 16px 60px; } }
 .pickRow { display: flex; flex-wrap: wrap; gap: 6px; }

@@ -22,8 +22,8 @@ const rows: Row[] = [
   { name: "member cannot read the audit log", role: "member", action: "account:audit", ctx: {}, allowed: false },
   { name: "custom role grants the audit log", role: "member", action: "account:audit", ctx: { caps: { "account:audit": true } }, allowed: true },
   { name: "custom role with account:manage implies the granular rights", role: "member", action: "account:security", ctx: { caps: { "account:manage": true } }, allowed: true },
-  { name: "custom role can deny a single right of an admin base", role: "admin", action: "account:billing", ctx: { caps: { "account:billing": false } }, allowed: false },
-  { name: "admin base role with a custom role keeps the other rights", role: "admin", action: "account:audit", ctx: { caps: { "account:billing": false } }, allowed: true },
+  { name: "custom role can deny a single right of an admin base", role: "admin", action: "account:security", ctx: { caps: { "account:security": false } }, allowed: false },
+  { name: "admin base role with a custom role keeps the other rights", role: "admin", action: "account:audit", ctx: { caps: { "account:security": false } }, allowed: true },
   { name: "viewer cannot invite", role: "viewer", action: "account:invite", ctx: {}, allowed: false },
   // ---- workspace create
   { name: "member creates workspaces", role: "member", action: "workspace:create", ctx: {}, allowed: true },

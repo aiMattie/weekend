@@ -1,7 +1,7 @@
 /**
  * Guests: external people with access to specific boards (or the shared boards of a workspace).
  * A guest only ever sees boards with visibility "share" they were given access to; never structure,
- * workspace lists or other users' content. The number of guests is limited by the plan (guests per seat).
+ * workspace lists or other users' content.
  */
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
@@ -14,7 +14,6 @@ import { boardMembers, boards, users, views, workspaces } from "../../db/schema/
 import { boardPermissions, guestGrants } from "../../db/schema/audit-log";
 import { getSettings, patchSettings } from "./account-settings";
 import { recordAudit } from "./audit";
-import { checkLimit, type LimitResult } from "./plans";
 import { invite, type InvitationWithLink } from "./members";
 import { syncGuestGrants } from "./guest-sync";
 import { revokeAllForUser } from "./sessions";
@@ -26,7 +25,7 @@ export interface GuestRow {
   workspaces: { id: string; name: string; role: "editor" | "viewer" }[];
 }
 
-export interface GuestOverview { enabled: boolean; restrictedViews: boolean; limit: LimitResult; guests: GuestRow[] }
+export interface GuestOverview { enabled: boolean; restrictedViews: boolean; guests: GuestRow[] }
 
 export function overview(actor: Actor): GuestOverview {
   assertCan(actor, "account:guests");
@@ -36,7 +35,7 @@ export function overview(actor: Actor): GuestOverview {
   const gg = ids.length ? db.select({ userId: guestGrants.userId, id: workspaces.id, name: workspaces.name, role: guestGrants.role }).from(guestGrants).innerJoin(workspaces, eq(workspaces.id, guestGrants.workspaceId)).where(inArray(guestGrants.userId, ids)).all() : [];
   const s = getSettings(actor.accountId).guests;
   return {
-    enabled: s.enabled, restrictedViews: s.restrictedViews, limit: checkLimit(actor, "guests", { increment: 0 }),
+    enabled: s.enabled, restrictedViews: s.restrictedViews,
     guests: gs.map((g) => ({
       id: g.id, name: g.name, email: g.email, isActive: g.isActive, lastLoginAt: g.lastLoginAt,
       boards: bm.filter((r) => r.userId === g.id).map(({ userId: _u, ...r }) => r), // eslint-disable-line @typescript-eslint/no-unused-vars

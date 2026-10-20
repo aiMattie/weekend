@@ -18,8 +18,6 @@ export function GuestsPage({ overview, invitations, workspaces, boards }: { over
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState<GuestRow | null>(null);
   const [link, setLink] = useState<{ email: string; link: string } | null>(null);
-  const lim = overview.limit;
-  const pct = lim.limit === null ? 0 : lim.limit === 0 ? 100 : Math.min(100, Math.round((lim.used / lim.limit) * 100));
   return (
     <>
       <PageHead title={t("admin.guests.title")} sub={t("admin.guests.sub")} actions={<Button onClick={() => setOpen(true)} disabled={!overview.enabled} data-testid="guest-invite">{t("admin.guests.invite")}</Button>} />
@@ -30,23 +28,17 @@ export function GuestsPage({ overview, invitations, workspaces, boards }: { over
           <CopyButton text={link.link} label={t("admin.copyLink")} />
         </div>
       )}
-      <div className={styles.split}>
-        <Card title={t("admin.guests.settings")}>
-          <div className={styles.fieldRow}>
-            <Toggle isSelected={overview.enabled} onChange={(v: boolean) => run(() => api.patch("/api/v1/admin/guests", { enabled: v }))} aria-label={t("admin.guests.enabled")} data-testid="guests-enabled" />
-            <span>{t("admin.guests.enabled")}</span>
-          </div>
-          <div className={styles.fieldRow}>
-            <Toggle isSelected={overview.restrictedViews} onChange={(v: boolean) => run(() => api.patch("/api/v1/admin/guests", { restrictedViews: v }))} aria-label={t("admin.guests.restricted")} data-testid="guests-restricted" />
-            <span>{t("admin.guests.restricted")}</span>
-          </div>
-          <p className={styles.hint}>{t("admin.guests.restrictedHint")}</p>
-        </Card>
-        <Card title={t("admin.guests.limit")} testId="guest-limit">
-          <p className={styles.hint}>{lim.limit === null ? t("admin.guests.unlimited", { used: lim.used }) : t("admin.guests.limitText", { used: lim.used, limit: lim.limit })}</p>
-          <div className={styles.meter}><div className={`${styles.meterFill} ${pct >= 100 ? styles.meterFull : ""}`} style={{ width: `${pct}%` }} /></div>
-        </Card>
-      </div>
+      <Card title={t("admin.guests.settings")}>
+        <div className={styles.fieldRow}>
+          <Toggle isSelected={overview.enabled} onChange={(v: boolean) => run(() => api.patch("/api/v1/admin/guests", { enabled: v }))} aria-label={t("admin.guests.enabled")} data-testid="guests-enabled" />
+          <span>{t("admin.guests.enabled")}</span>
+        </div>
+        <div className={styles.fieldRow}>
+          <Toggle isSelected={overview.restrictedViews} onChange={(v: boolean) => run(() => api.patch("/api/v1/admin/guests", { restrictedViews: v }))} aria-label={t("admin.guests.restricted")} data-testid="guests-restricted" />
+          <span>{t("admin.guests.restricted")}</span>
+        </div>
+        <p className={styles.hint}>{t("admin.guests.restrictedHint")}</p>
+      </Card>
       <Card testId="guests-card">
         <table className={styles.table} data-testid="guests-table">
           <thead><tr><th>{t("admin.users.name")}</th><th>{t("admin.guests.access")}</th><th>{t("admin.users.lastActive")}</th><th /></tr></thead>

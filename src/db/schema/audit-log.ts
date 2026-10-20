@@ -3,7 +3,7 @@
  * admin module: audit log, custom account roles, invitations, 2FA / sessions, permission settings
  * per workspace / board / column, guest grants and recent searches.
  *
- * Account level settings (security, SSO, plan limits, retention...) live in accounts.settings (JSON).
+ * Account level settings (security, SSO, retention...) live in accounts.settings (JSON).
  */
 import { index, integer, primaryKey, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { createdAt, idPk, json } from "./_helpers";

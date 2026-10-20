@@ -18,7 +18,6 @@ import { parseCsv } from "../../modules/admin/lib/csv";
 import { randomToken, sha256 } from "../../modules/admin/lib/seal";
 import { assertPasswordPolicy } from "./security";
 import { recordAudit } from "./audit";
-import { assertLimit } from "./plans";
 import { syncGuestGrants } from "./guest-sync";
 import { createSession, revokeAllForUser } from "./sessions";
 import { parse } from "./_shared";
@@ -127,7 +126,6 @@ export function invite(actor: Actor, input: unknown, ctx: { origin?: string } = 
   assertCan(actor, d.role === "guest" ? "account:guests" : "account:invite");
   if (d.role === "admin" && !actor.isSystem && actor.role !== "admin") throw new ValidationError("Only admins can invite admins");
   if (db.select({ id: users.id }).from(users).where(sql`lower(${users.email}) = ${d.email}`).get()) throw new ConflictError("A user with this email already exists");
-  if (d.role === "guest") assertLimit(actor, "guests");
   if (d.customRoleId && !db.select({ id: accountRoles.id }).from(accountRoles).where(and(eq(accountRoles.id, d.customRoleId), eq(accountRoles.accountId, actor.accountId))).get()) throw new NotFoundError("Role");
   db.update(invitations).set({ status: "revoked" }).where(and(eq(invitations.accountId, actor.accountId), eq(invitations.email, d.email), eq(invitations.status, "pending"))).run();
   const token = randomToken(24);

@@ -8,7 +8,6 @@ import { verifySessionClaims } from "../../src/lib/auth/session";
 import * as account from "../../src/server/services/account";
 import * as audit from "../../src/server/services/audit";
 import { authenticate } from "../../src/server/services/login-flow";
-import * as plans from "../../src/server/services/plans";
 import * as profile from "../../src/server/services/profile";
 import * as security from "../../src/server/services/security";
 import * as sessions from "../../src/server/services/sessions";
@@ -159,25 +158,7 @@ describe("IP allow-list", () => {
   });
 });
 
-describe("plans and limits", () => {
-  it("defaults to Enterprise (unlimited) and enforces limits of other plans", () => {
-    expect(plans.checkLimit(c.admin, "guests")).toMatchObject({ ok: true, limit: null, plan: "enterprise" });
-    expect(plans.checkLimit(c.accountId, "automationsPerMonth").ok).toBe(true);
-    account.setPlan(c.admin, "free");
-    expect(plans.checkLimit(c.admin, "guests")).toMatchObject({ ok: false, limit: 0 });
-    expect(() => plans.assertLimit(c.admin, "guests")).toThrow(/Plan limit/);
-    expect(plans.checkLimit(c.admin, "viewsPerBoard", { boardId: c.boardId }).limit).toBe(1);
-    account.setPlan(c.admin, "standard");
-    const seats = plans.seatCount(c.accountId);
-    expect(plans.checkLimit(c.admin, "guests")).toMatchObject({ ok: true, limit: 5 * seats });
-    account.setLimitOverride(c.admin, "guestsPerSeat", null);
-    expect(plans.checkLimit(c.admin, "guests").limit).toBeNull();
-    const o = account.planOverview(c.admin);
-    expect(o.plans.map((p) => p.key)).toEqual(["free", "basic", "standard", "pro", "enterprise"]);
-    expect(() => account.setPlan(c.member, "free")).toThrow(/Not allowed/);
-    expect(() => account.planOverview(c.member)).toThrow(/Not allowed/);
-  });
-
+describe("account settings", () => {
   it("account settings: general, validation and audit", () => {
     const a = account.update(c.admin, { name: "Example BV", weekStart: "sunday", timeZone: "Europe/London" });
     expect(a).toMatchObject({ name: "Example BV", general: { weekStart: "sunday", timeZone: "Europe/London", defaultLocale: "nl" } });

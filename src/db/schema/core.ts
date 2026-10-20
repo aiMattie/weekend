@@ -15,7 +15,6 @@ export const accounts = sqliteTable("accounts", {
   id: idPk(),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
-  plan: text("plan").notNull().default("enterprise"),
   settings: json<Record<string, unknown>>("settings").notNull().default({}),
   createdAt: createdAt(),
 });

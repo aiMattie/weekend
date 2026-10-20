@@ -123,14 +123,6 @@ describe("roles and users", () => {
     expect(members.list(c.admin).find((u) => u.id === c.member.id)?.isActive).toBe(true);
     expect(audit.list(c.admin, { event: "user.deactivated" }).rows).toHaveLength(1);
   });
-
-  it("guest limit of the plan is enforced on invitations", () => {
-    account.setPlan(c.admin, "basic");
-    account.setLimitOverride(c.admin, "guestsPerSeat", 0);
-    expect(() => members.invite(c.admin, { email: "g@x.nl", role: "guest", boardIds: [c.boardId] })).toThrow(/Plan limit/);
-    account.setPlan(c.admin, "enterprise");
-    expect(members.invite(c.admin, { email: "g@x.nl", role: "guest", boardIds: [c.boardId] }).email).toBe("g@x.nl");
-  });
 });
 
 describe("audit entries exist for invitations", () => {

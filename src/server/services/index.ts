@@ -53,7 +53,6 @@ export * as security from "./security";
 export * as sessions from "./sessions";
 export * as twofactor from "./twofactor";
 export { recordAudit } from "./audit";
-export { checkLimit, assertLimit } from "./plans";
 // columns
 export * as assets from "./assets";
 export * as tags from "./tags";
