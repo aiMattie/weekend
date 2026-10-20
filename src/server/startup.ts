@@ -13,5 +13,5 @@ import { startAgentEngine } from "./ai/agent-engine";
 startAgentEngine(); // ai: agent triggers on bus events + schedule tick
 import { startImportScheduler } from "./services/migration/import-scheduler";
 
-startImportScheduler(); // migration: scheduled monday.com imports (Admin > Import)
+startImportScheduler(); // migration: scheduled monday.com/Jira imports (Admin > Import)
 // <- add startup tasks above this line

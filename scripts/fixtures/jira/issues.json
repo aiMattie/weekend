@@ -1,0 +1,724 @@
+{
+  "ALPHA": [
+    {
+      "id": "16501",
+      "key": "ALPHA-1",
+      "fields": {
+        "summary": "MVP bouwen",
+        "description": null,
+        "issuetype": {
+          "name": "Epic",
+          "subtask": false,
+          "hierarchyLevel": 1
+        },
+        "status": {
+          "name": "In Progress",
+          "statusCategory": {
+            "key": "indeterminate"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": null,
+        "assignee": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16502",
+      "key": "ALPHA-2",
+      "fields": {
+        "summary": "Login scherm",
+        "description": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Belangrijk",
+                  "marks": [
+                    {
+                      "type": "strong"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "text": " en "
+                },
+                {
+                  "type": "text",
+                  "text": "link",
+                  "marks": [
+                    {
+                      "type": "link",
+                      "attrs": {
+                        "href": "https://example.test/x"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "bulletList",
+              "content": [
+                {
+                  "type": "listItem",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "punt een"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "issuetype": {
+          "name": "Story",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "To Do",
+          "statusCategory": {
+            "key": "new"
+          }
+        },
+        "priority": {
+          "name": "High"
+        },
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": {
+          "key": "ALPHA-1",
+          "fields": {
+            "issuetype": {
+              "name": "Epic"
+            }
+          }
+        },
+        "assignee": {
+          "accountId": "acc-builder",
+          "displayName": "Builder Developer",
+          "emailAddress": "dev1@example.com"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [
+          {
+            "id": "att-1",
+            "filename": "spec.pdf",
+            "mimeType": "application/pdf",
+            "size": 11,
+            "content": "https://fixture.atlassian.net/secure/attachment/att-1/spec.pdf",
+            "created": "2026-09-01T10:00:00.000+0200",
+            "author": {
+              "accountId": "acc-builder",
+              "displayName": "Builder Developer",
+              "emailAddress": "dev1@example.com"
+            }
+          }
+        ],
+        "timeoriginalestimate": null,
+        "customfield_10020": [
+          {
+            "id": 11,
+            "name": "Sprint 1",
+            "state": "closed",
+            "startDate": "2026-09-07T08:00:00.000Z",
+            "endDate": "2026-09-18T17:00:00.000Z",
+            "completeDate": "2026-09-18T16:30:00.000Z",
+            "goal": "Fundament"
+          },
+          {
+            "id": 12,
+            "name": "Sprint 2",
+            "state": "active",
+            "startDate": "2026-09-21T08:00:00.000Z",
+            "endDate": "2026-10-02T17:00:00.000Z"
+          }
+        ],
+        "customfield_10016": 5,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16503",
+      "key": "ALPHA-3",
+      "fields": {
+        "summary": "Crash bij upload",
+        "description": null,
+        "issuetype": {
+          "name": "Bug",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "In Progress",
+          "statusCategory": {
+            "key": "indeterminate"
+          }
+        },
+        "priority": {
+          "name": "Highest"
+        },
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": {
+          "key": "ALPHA-1",
+          "fields": {
+            "issuetype": {
+              "name": "Epic"
+            }
+          }
+        },
+        "assignee": {
+          "accountId": "acc-reviewer",
+          "displayName": "Reviewer Dev"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": 7200,
+        "customfield_10020": [
+          {
+            "id": 12,
+            "name": "Sprint 2",
+            "state": "active",
+            "startDate": "2026-09-21T08:00:00.000Z",
+            "endDate": "2026-10-02T17:00:00.000Z"
+          }
+        ],
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16504",
+      "key": "ALPHA-4",
+      "fields": {
+        "summary": "Documentatie",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "Done",
+          "statusCategory": {
+            "key": "done"
+          }
+        },
+        "priority": {
+          "name": "Low"
+        },
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": {
+          "key": "ALPHA-1",
+          "fields": {
+            "issuetype": {
+              "name": "Epic"
+            }
+          }
+        },
+        "assignee": {
+          "accountId": "acc-builder",
+          "displayName": "Builder Developer",
+          "emailAddress": "dev1@example.com"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-09-26T12:00:00.000+0200",
+        "resolutiondate": "2026-09-26T12:00:00.000+0200",
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": [
+          {
+            "id": 11,
+            "name": "Sprint 1",
+            "state": "closed",
+            "startDate": "2026-09-07T08:00:00.000Z",
+            "endDate": "2026-09-18T17:00:00.000Z",
+            "completeDate": "2026-09-18T16:30:00.000Z",
+            "goal": "Fundament"
+          }
+        ],
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16505",
+      "key": "ALPHA-5",
+      "fields": {
+        "summary": "Wireframe",
+        "description": null,
+        "issuetype": {
+          "name": "Sub-task",
+          "subtask": true,
+          "hierarchyLevel": -1
+        },
+        "status": {
+          "name": "Done",
+          "statusCategory": {
+            "key": "done"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": {
+          "key": "ALPHA-2",
+          "fields": {
+            "issuetype": {
+              "name": "Story"
+            }
+          }
+        },
+        "assignee": {
+          "accountId": "acc-builder",
+          "displayName": "Builder Developer",
+          "emailAddress": "dev1@example.com"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": "2026-09-10T12:00:00.000+0200",
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16506",
+      "key": "ALPHA-6",
+      "fields": {
+        "summary": "Wachten op API-sleutel",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "Waiting on customer",
+          "statusCategory": {
+            "key": "indeterminate"
+          }
+        },
+        "priority": {
+          "name": "Low"
+        },
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": null,
+        "assignee": {
+          "accountId": "acc-unknown",
+          "displayName": "Unknown Person"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16507",
+      "key": "ALPHA-7",
+      "fields": {
+        "summary": "Oude taak (te oud)",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "Done",
+          "statusCategory": {
+            "key": "done"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": null,
+        "assignee": null,
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-06-01T12:00:00.000+0200",
+        "resolutiondate": "2026-06-01T12:00:00.000+0200",
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16508",
+      "key": "ALPHA-8",
+      "fields": {
+        "summary": "Rapportage",
+        "description": null,
+        "issuetype": {
+          "name": "Story",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "In Review",
+          "statusCategory": {
+            "key": "indeterminate"
+          }
+        },
+        "priority": {
+          "name": "Medium"
+        },
+        "project": {
+          "key": "ALPHA",
+          "name": "Alpha Klant"
+        },
+        "parent": null,
+        "assignee": {
+          "accountId": "acc-reviewer",
+          "displayName": "Reviewer Dev"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": [
+          {
+            "id": 13,
+            "name": "Sprint 3",
+            "state": "future"
+          }
+        ],
+        "customfield_10016": null,
+        "customfield_10014": "ALPHA-1"
+      }
+    }
+  ],
+  "BETA": [
+    {
+      "id": "16601",
+      "key": "BETA-1",
+      "fields": {
+        "summary": "Support",
+        "description": null,
+        "issuetype": {
+          "name": "Epic",
+          "subtask": false,
+          "hierarchyLevel": 1
+        },
+        "status": {
+          "name": "Done",
+          "statusCategory": {
+            "key": "done"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "BETA",
+          "name": "Beta BV"
+        },
+        "parent": null,
+        "assignee": null,
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": "2026-09-06T12:00:00.000+0200",
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16602",
+      "key": "BETA-2",
+      "fields": {
+        "summary": "Strippenkaart afboeken",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "Awaiting feedback",
+          "statusCategory": {
+            "key": "indeterminate"
+          }
+        },
+        "priority": {
+          "name": "Medium"
+        },
+        "project": {
+          "key": "BETA",
+          "name": "Beta BV"
+        },
+        "parent": {
+          "key": "BETA-1",
+          "fields": {
+            "issuetype": {
+              "name": "Epic"
+            }
+          }
+        },
+        "assignee": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    },
+    {
+      "id": "16603",
+      "key": "BETA-3",
+      "fields": {
+        "summary": "Meerwerk dashboard",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "To Do",
+          "statusCategory": {
+            "key": "new"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "BETA",
+          "name": "Beta BV"
+        },
+        "parent": null,
+        "assignee": {
+          "accountId": "acc-builder",
+          "displayName": "Builder Developer",
+          "emailAddress": "dev1@example.com"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [
+          "meerwerk"
+        ],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    }
+  ],
+  "INT": [
+    {
+      "id": "17301",
+      "key": "INT-1",
+      "fields": {
+        "summary": "Intern overleg",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "To Do",
+          "statusCategory": {
+            "key": "new"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "INT",
+          "name": "Example Intern"
+        },
+        "parent": null,
+        "assignee": {
+          "accountId": "acc-reviewer",
+          "displayName": "Reviewer Dev"
+        },
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-10-02T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    }
+  ],
+  "OLD": [
+    {
+      "id": "17901",
+      "key": "OLD-1",
+      "fields": {
+        "summary": "Verlaten project",
+        "description": null,
+        "issuetype": {
+          "name": "Task",
+          "subtask": false,
+          "hierarchyLevel": 0
+        },
+        "status": {
+          "name": "To Do",
+          "statusCategory": {
+            "key": "new"
+          }
+        },
+        "priority": null,
+        "project": {
+          "key": "OLD",
+          "name": "Oude Klant"
+        },
+        "parent": null,
+        "assignee": null,
+        "reporter": {
+          "accountId": "acc-coordinator",
+          "displayName": "Coordinator Pm",
+          "emailAddress": "pm2@example.com"
+        },
+        "created": "2026-08-20T09:00:00.000+0200",
+        "updated": "2026-03-01T10:00:00.000+0200",
+        "resolutiondate": null,
+        "labels": [],
+        "attachment": [],
+        "timeoriginalestimate": null,
+        "customfield_10020": null,
+        "customfield_10016": null,
+        "customfield_10014": null
+      }
+    }
+  ]
+}

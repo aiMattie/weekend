@@ -1,0 +1,33 @@
+[
+  {
+    "id": "customfield_10020",
+    "name": "Sprint",
+    "custom": true,
+    "schema": {
+      "type": "array",
+      "custom": "com.pyxis.greenhopper.jira:gh-sprint"
+    }
+  },
+  {
+    "id": "customfield_10016",
+    "name": "Story point estimate",
+    "custom": true,
+    "schema": {
+      "type": "number"
+    }
+  },
+  {
+    "id": "customfield_10014",
+    "name": "Epic Link",
+    "custom": true,
+    "schema": {
+      "type": "any",
+      "custom": "com.pyxis.greenhopper.jira:gh-epic-link"
+    }
+  },
+  {
+    "id": "summary",
+    "name": "Summary",
+    "custom": false
+  }
+]

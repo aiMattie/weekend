@@ -10,7 +10,7 @@ import styles from "./import.module.css";
 
 type Counts = Record<string, { create: number; update: number; skip: number }>;
 export interface JobDto {
-  id: string; kind: "monday"; mode: "dry_run" | "apply"; status: "running" | "done" | "failed";
+  id: string; kind: "monday" | "jira"; mode: "dry_run" | "apply"; status: "running" | "done" | "failed";
   counts: Counts; report: { warnings?: string[]; diff?: string[]; skipped?: Record<string, number>; files?: Record<string, number>; requests?: number; durationMs?: number };
   error: string | null; createdAt: string; finishedAt: string | null;
 }

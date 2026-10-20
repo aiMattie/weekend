@@ -54,6 +54,7 @@ The person using you may not be a developer. Before doing anything else:
 - Vibe injects its CSS from JS: `src/lib/vibe-ssr-init.ts` + `VibeSsrStyles` print it during SSR. Figtree is bundled via `@fontsource/figtree`.
 - MCP server (`/api/mcp`, tools in `src/server/mcp/tools/*`). Auth: API token (`Authorization: Bearer wkd_…`, Admin > API) or OAuth 2.1 (`src/server/services/oauth.ts`, discovery `/.well-known/oauth-*`, DCR `/api/oauth/register`, consent `/oauth/authorize`, token `/api/oauth/token`; redirect hosts `OAUTH_REDIRECT_HOSTS`, default claude.ai/claude.com + loopback).
 - Import from monday.com: Admin > Import or `scripts/import-monday.ts` (`MONDAY_API_KEY`), read-only against the monday.com API.
+- Import from Jira Cloud: Admin > Import (link the site, schedule a sync) or `scripts/migrate-jira.ts` (`JIRA_BASE_URL`, `JIRA_EMAIL`, `JIRA_API_TOKEN`), read-only against Jira; `--fixtures` rehearses against `scripts/fixtures/jira`. Code: `src/server/services/jira-migration.ts` + `src/server/services/migration/jira-*.ts`.
 
 ## Deploy (optional)
 - CI: `.github/workflows/ci.yml` (typecheck, lint, test, build). `scripts/deploy/auto-deploy.sh` is an optional pull-based deploy for a Docker host (requires `REPO=<git url>`); details in `scripts/deploy/README.md`.

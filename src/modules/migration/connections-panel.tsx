@@ -17,7 +17,7 @@ async function call(url: string, method: string, body?: unknown): Promise<{ ok: 
   return { ok: r.ok, data, error: r.ok ? "" : (data as { error?: { message?: string } } | null)?.error?.message ?? `HTTP ${r.status}` };
 }
 
-/** Admin > Import: link monday.com and schedule recurring syncs. */
+/** Admin > Import: link monday.com and Jira and schedule recurring syncs. */
 export function ConnectionsPanel({ initial, onJobStarted }: { initial: ConnectionsView; onJobStarted: (jobId: string) => void }) {
   const t = useT();
   const [view, setView] = useState(initial);
@@ -39,7 +39,11 @@ function ConnectionCard({ conn, onView, onJobStarted }: { conn: ConnectionView; 
   const base = `/api/v1/admin/import/connections/${k}`;
   const [editing, setEditing] = useState(!conn.linked);
   const [apiKey, setApiKey] = useState("");
-  const [scope, setScope] = useState(conn.schedule.workspaces?.join(", ") ?? "");
+  const [baseUrl, setBaseUrl] = useState(conn.baseUrl ?? "");
+  const [email, setEmail] = useState(conn.email ?? "");
+  const [scope, setScope] = useState((k === "monday" ? conn.schedule.workspaces : conn.schedule.projects)?.join(", ") ?? "");
+  const [anchor, setAnchor] = useState(conn.schedule.sprintCadence?.anchor ?? "");
+  const [weeks, setWeeks] = useState(conn.schedule.sprintCadence?.weeks ?? 2);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
@@ -51,13 +55,13 @@ function ConnectionCard({ conn, onView, onJobStarted }: { conn: ConnectionView; 
     if (!r.ok) { setErr(r.error); return; }
     done?.(r.data);
   };
-  const connect = () => act(() => call(base, "PUT", { apiKey }), (d) => { onView(d as ConnectionsView); setApiKey(""); setEditing(false); setMsg(t("migration.conn.linkedOk")); });
+  const connect = () => act(() => call(base, "PUT", k === "monday" ? { apiKey } : { baseUrl, email, apiToken: apiKey }), (d) => { onView(d as ConnectionsView); setApiKey(""); setEditing(false); setMsg(t("migration.conn.linkedOk")); });
   const unlink = () => { if (window.confirm(t("migration.conn.confirmUnlink"))) void act(() => call(base, "DELETE"), (d) => { onView(d as ConnectionsView); setEditing(true); }); };
   const test = () => act(() => call(`${base}/test`, "POST"), (d) => setMsg(t("migration.conn.testOk", { label: (d as { label: string }).label })));
   const schedule = (patch: Record<string, unknown>) => act(() => call(`${base}/schedule`, "PUT", patch), (d) => onView(d as ConnectionsView));
   const saveScope = () => {
     const list = scope.split(/[,\s]+/).map((s) => s.trim()).filter(Boolean);
-    void schedule({ workspaces: list });
+    void schedule(k === "monday" ? { workspaces: list } : { projects: list });
   };
   const runNow = () => { if (window.confirm(t("migration.conn.confirmRun"))) void act(() => call(`${base}/run`, "POST"), (d) => { setMsg(t("migration.conn.runStarted")); onJobStarted((d as { id: string }).id); }); };
 
@@ -74,6 +78,7 @@ function ConnectionCard({ conn, onView, onJobStarted }: { conn: ConnectionView; 
       {conn.linked && !editing && (
         <div className={styles.meta}>
           {conn.label && <div>{t("migration.conn.as", { label: conn.label })}</div>}
+          {k === "jira" && conn.baseUrl && <div>{conn.baseUrl} · {conn.email}</div>}
           {conn.connectedAt && <div>{t("migration.conn.since", { when: fmt(conn.connectedAt) })}</div>}
           <div className={styles.row}>
             <Button size="small" kind="secondary" onClick={() => void test()} disabled={!ready || busy} data-testid={`conn-${k}-test`}>{t("migration.conn.test")}</Button>
@@ -84,13 +89,19 @@ function ConnectionCard({ conn, onView, onJobStarted }: { conn: ConnectionView; 
       )}
       {editing && (
         <div className={styles.fields}>
+          {k === "jira" && (
+            <>
+              <label>{t("migration.conn.jiraUrl")}<input className={styles.input} value={baseUrl} onChange={(e) => setBaseUrl(e.target.value)} placeholder="https://jouwbedrijf.atlassian.net" data-testid="conn-jira-url" /></label>
+              <label>{t("migration.conn.jiraEmail")}<input className={styles.input} type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="off" data-testid="conn-jira-email" /></label>
+            </>
+          )}
           <label>
-            {t("migration.conn.mondayKey")}
+            {t(k === "monday" ? "migration.conn.mondayKey" : "migration.conn.jiraToken")}
             <input className={styles.input} type="password" value={apiKey} onChange={(e) => setApiKey(e.target.value)} autoComplete="new-password" data-testid={`conn-${k}-secret`} />
           </label>
-          <p className={styles.hint}>{t("migration.conn.mondayHelp")}</p>
+          <p className={styles.hint}>{t(k === "monday" ? "migration.conn.mondayHelp" : "migration.conn.jiraHelp")}</p>
           <div className={styles.row}>
-            <Button size="small" onClick={() => void connect()} disabled={!ready || busy || !apiKey.trim()} data-testid={`conn-${k}-connect`}>{t("migration.conn.connect")}</Button>
+            <Button size="small" onClick={() => void connect()} disabled={!ready || busy || !apiKey.trim() || (k === "jira" && (!baseUrl.trim() || !email.trim()))} data-testid={`conn-${k}-connect`}>{t("migration.conn.connect")}</Button>
             {conn.linked && <Button size="small" kind="tertiary" onClick={() => setEditing(false)} disabled={busy}>{t("migration.conn.cancel")}</Button>}
           </div>
         </div>
@@ -115,12 +126,25 @@ function ConnectionCard({ conn, onView, onJobStarted }: { conn: ConnectionView; 
         )}
       </div>
       <label className={styles.fields}>
-        {t("migration.conn.scopeMonday")}
+        {t(k === "monday" ? "migration.conn.scopeMonday" : "migration.conn.scopeJira")}
         <span className={styles.row}>
           <input className={styles.input} value={scope} onChange={(e) => setScope(e.target.value)} placeholder={t("migration.conn.scopeAll")} data-testid={`conn-${k}-scope`} />
           <Button size="small" kind="secondary" onClick={saveScope} disabled={!ready || busy}>{t("migration.conn.save")}</Button>
         </span>
       </label>
+      {k === "jira" && (
+        <label className={styles.fields}>
+          {t("migration.conn.cadence")}
+          <span className={styles.row}>
+            <input className={styles.input} type="date" value={anchor} onChange={(e) => setAnchor(e.target.value)} aria-label={t("migration.conn.cadenceAnchor")} data-testid="conn-jira-cadence-anchor" />
+            <select className={styles.select} value={weeks} onChange={(e) => setWeeks(Number(e.target.value))} aria-label={t("migration.conn.cadenceWeeks")} data-testid="conn-jira-cadence-weeks">
+              {[1, 2, 3, 4, 6, 8].map((w) => <option key={w} value={w}>{w} {t("migration.conn.cadenceWeeks").toLowerCase()}</option>)}
+            </select>
+            <Button size="small" kind="secondary" onClick={() => void schedule({ sprintCadence: anchor ? { anchor, weeks } : null })} disabled={!ready || busy}>{t("migration.conn.save")}</Button>
+          </span>
+          {!s.sprintCadence && <span className={styles.hint}>{t("migration.conn.cadenceOff")}</span>}
+        </label>
+      )}
       <div className={styles.meta} data-testid={`conn-${k}-runs`}>
         <div>{t("migration.conn.next")}: {s.enabled ? fmt(s.nextRunAt) : t("migration.conn.off")}</div>
         <div>

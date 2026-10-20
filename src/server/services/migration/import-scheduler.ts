@@ -1,5 +1,5 @@
 /**
- * In-process timer for the scheduled imports (Admin > Import): every minute, start the monday.com runs whose
+ * In-process timer for the scheduled imports (Admin > Import): every minute, start the monday.com / Jira runs whose
  * slot has passed. Off with IMPORT_SCHEDULER=off and under Vitest. HMR safe (one timer per process).
  */
 import { tickImportSchedules } from "../import-connections";

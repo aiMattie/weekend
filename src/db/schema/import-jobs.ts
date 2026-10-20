@@ -1,13 +1,13 @@
 /**
- * Schema of module M (migration): import_jobs (history of monday.com imports)
- * and external_refs (maps an external id, e.g. a monday.com item id, to a clone entity
+ * Schema of module M (migration): import_jobs (history of monday.com imports and Jira migrations)
+ * and external_refs (maps an external id, e.g. a monday.com item id or a Jira key, to a clone entity
  * so re-runs update instead of duplicate; the core schema stays untouched).
  */
 import { index, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { createdAt, idPk, json, updatedAt } from "./_helpers";
 import { accounts, users } from "./core";
 
-export type ImportJobKind = "monday";
+export type ImportJobKind = "monday" | "jira";
 export type ImportJobStatus = "running" | "done" | "failed";
 
 export const importJobs = sqliteTable(
@@ -40,7 +40,7 @@ export const externalRefs = sqliteTable(
     /** user | team | workspace | folder | board | group | column | item | update | asset | sprint | doc | worklog */
     entityType: text("entity_type").notNull(),
     entityId: text("entity_id").notNull(),
-    /** monday */
+    /** monday | jira */
     source: text("source").notNull(),
     externalId: text("external_id").notNull(),
     /** hash of the last imported payload, lets a re-run skip unchanged rows */

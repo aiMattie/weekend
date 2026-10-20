@@ -1,0 +1,76 @@
+{
+  "ALPHA-2": [
+    {
+      "id": "c1",
+      "author": {
+        "accountId": "acc-coordinator",
+        "displayName": "Coordinator Pm",
+        "emailAddress": "pm2@example.com"
+      },
+      "body": {
+        "type": "doc",
+        "version": 1,
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Graag ook SSO meenemen"
+              }
+            ]
+          }
+        ]
+      },
+      "created": "2026-09-02T09:00:00.000+0200"
+    },
+    {
+      "id": "c2",
+      "author": {
+        "accountId": "acc-unknown",
+        "displayName": "Unknown Person"
+      },
+      "body": {
+        "type": "doc",
+        "version": 1,
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Akkoord vanuit de klant"
+              }
+            ]
+          }
+        ]
+      },
+      "created": "2026-09-03T09:00:00.000+0200"
+    }
+  ],
+  "ALPHA-3": [
+    {
+      "id": "c3",
+      "author": {
+        "accountId": "acc-reviewer",
+        "displayName": "Reviewer Dev"
+      },
+      "body": {
+        "type": "doc",
+        "version": 1,
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "Reproduceerbaar met bestanden > 10MB"
+              }
+            ]
+          }
+        ]
+      },
+      "created": "2026-09-25T09:00:00.000+0200"
+    }
+  ]
+}
