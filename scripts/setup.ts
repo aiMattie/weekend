@@ -49,6 +49,11 @@ async function randomFreePort(): Promise<number> {
 
 /** Create or complete .env. Existing values are never overwritten, except PORT/APP_URL with --port. */
 async function ensureEnv(): Promise<{ port: number; url: string }> {
+  // Docker: settings come from env_file and /app is read-only for the node user, so don't write a .env
+  if (!existsSync(ENV) && process.env.SESSION_SECRET && process.env.DATABASE_URL) {
+    const port = Number(process.env.PORT || 3000);
+    return { port, url: process.env.APP_URL || `http://localhost:${port}` };
+  }
   const env = readEnv();
   const want = a.port ? Number(a.port) : env.PORT ? Number(env.PORT) : await randomFreePort();
   if (!Number.isInteger(want) || want < 1024 || want > 65535) throw new Error(`Invalid port: ${a.port}`);

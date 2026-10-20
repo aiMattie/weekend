@@ -135,7 +135,7 @@ const jiraInput = z.object({
   apiToken: z.string().trim().min(10).max(2000),
 });
 
-/** "nina-ai.atlassian.net" or "https://nina-ai.atlassian.net/jira/..." -> "https://nina-ai.atlassian.net" */
+/** "example.atlassian.net" or "https://example.atlassian.net/jira/..." -> "https://example.atlassian.net" */
 export function normalizeJiraUrl(input: string): string {
   let u: URL;
   try { u = new URL(/^https?:\/\//i.test(input) ? input : `https://${input}`); } catch { throw new ValidationError("Ongeldige Jira-URL"); }

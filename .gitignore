@@ -1,5 +1,20 @@
 node_modules/
+
+# secrets: never commit (only the .env.example template is tracked)
 .env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+credentials*.json
+service-account*.json
+secrets/
+
 .next/
 dist/
 build/
@@ -25,3 +40,7 @@ test-results-*/
 # generated screenshots (e2e / npm run manuals)
 docs/design/tableux/
 docs/handleiding/img/
+
+# host-specific files (server names, ports, compose overrides): never commit
+CLAUDE.local.md
+docker-compose.override.yml

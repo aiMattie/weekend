@@ -4,7 +4,8 @@ services:
   app:
     build: .
     image: weekend:latest
-    container_name: weekend
+    # set CONTAINER_NAME (and COMPOSE_PROJECT_NAME) in .env to name the stack after your domain
+    container_name: ${CONTAINER_NAME:-weekend}
     env_file: .env
     environment:
       NODE_ENV: production
