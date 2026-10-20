@@ -60,6 +60,7 @@ export * as columnActions from "./column-actions";
 export * as columnOps from "./column-ops";
 export * as columnLookup from "./column-lookup";
 export * as templates from "./templates";
+export * as jiraMigration from "./jira-migration";
 export * as importConnections from "./import-connections";
 // platform
 export * as apiTokens from "./api-tokens";

@@ -24,6 +24,7 @@ export interface ImportSchedule {
 /** Linked source accounts for the importers (Admin > Import). Secrets are sealed (seal.ts), never returned. */
 export interface ImportConnections {
   monday: { apiKey: string | null; accountName: string | null; connectedAt: string | null; connectedBy: string | null; schedule: ImportSchedule & { workspaces: string[] } };
+  jira: { baseUrl: string | null; email: string | null; apiToken: string | null; displayName: string | null; connectedAt: string | null; connectedBy: string | null; schedule: ImportSchedule & { projects: string[]; doneDays: number; sprintCadence: { anchor: string; weeks: number } | null } };
 }
 
 export interface AccountSettings {
@@ -64,6 +65,7 @@ export const DEFAULT_SETTINGS: AccountSettings = {
   retentionDays: 365,
   importConnections: {
     monday: { apiKey: null, accountName: null, connectedAt: null, connectedBy: null, schedule: { ...SCHEDULE_OFF, workspaces: [] } },
+    jira: { baseUrl: null, email: null, apiToken: null, displayName: null, connectedAt: null, connectedBy: null, schedule: { ...SCHEDULE_OFF, projects: [], doneDays: 3650, sprintCadence: null } },
   },
 };
 

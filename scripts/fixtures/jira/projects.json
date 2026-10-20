@@ -1,0 +1,30 @@
+[
+  {
+    "id": "100",
+    "key": "ALPHA",
+    "name": "Alpha Klant",
+    "projectTypeKey": "software",
+    "archived": false
+  },
+  {
+    "id": "101",
+    "key": "BETA",
+    "name": "Beta BV",
+    "projectTypeKey": "software",
+    "archived": false
+  },
+  {
+    "id": "102",
+    "key": "INT",
+    "name": "Example Intern",
+    "projectTypeKey": "software",
+    "archived": false
+  },
+  {
+    "id": "103",
+    "key": "OLD",
+    "name": "Oude Klant",
+    "projectTypeKey": "software",
+    "archived": false
+  }
+]

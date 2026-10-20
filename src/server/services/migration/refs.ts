@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { db } from "../../../db/client";
 import { externalRefs } from "../../../db/schema/import-jobs";
 
-export type RefSource = "monday";
+export type RefSource = "monday" | "jira";
 
 export const hashOf = (v: unknown): string => createHash("sha1").update(JSON.stringify(v)).digest("hex").slice(0, 16);
 
@@ -31,7 +31,7 @@ export type Outcome = "create" | "update" | "skip";
 export interface EntityCounts { create: number; update: number; skip: number }
 
 /**
- * Upsert tracker used by the importer. In dry-run mode nothing is written:
+ * Upsert tracker shared by importer and Jira migration. In dry-run mode nothing is written:
  * `upsert` only classifies the entity and hands back a numeric placeholder id (9xxxxxxxx),
  * so the surrounding code runs unchanged.
  */

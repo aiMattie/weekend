@@ -1,0 +1,110 @@
+{
+  "ALPHA-2": [
+    {
+      "id": "w1",
+      "issueKey": "ALPHA-2",
+      "author": {
+        "accountId": "acc-builder",
+        "displayName": "Builder Developer",
+        "emailAddress": "dev1@example.com"
+      },
+      "started": "2026-10-01T09:00:00.000+0200",
+      "timeSpentSeconds": 7200
+    },
+    {
+      "id": "w2",
+      "issueKey": "ALPHA-2",
+      "author": {
+        "accountId": "acc-builder",
+        "displayName": "Builder Developer",
+        "emailAddress": "dev1@example.com"
+      },
+      "started": "2026-10-02T09:00:00.000+0200",
+      "timeSpentSeconds": 10800
+    },
+    {
+      "id": "w3",
+      "issueKey": "ALPHA-2",
+      "author": {
+        "accountId": "acc-coordinator",
+        "displayName": "Coordinator Pm",
+        "emailAddress": "pm2@example.com"
+      },
+      "started": "2026-10-02T09:00:00.000+0200",
+      "timeSpentSeconds": 3600
+    }
+  ],
+  "ALPHA-3": [
+    {
+      "id": "w4",
+      "issueKey": "ALPHA-3",
+      "author": {
+        "accountId": "acc-reviewer",
+        "displayName": "Reviewer Dev"
+      },
+      "started": "2026-10-05T09:00:00.000+0200",
+      "timeSpentSeconds": 14400
+    },
+    {
+      "id": "w5",
+      "issueKey": "ALPHA-3",
+      "author": {
+        "accountId": "acc-builder",
+        "displayName": "Builder Developer",
+        "emailAddress": "dev1@example.com"
+      },
+      "started": "2026-09-28T09:00:00.000+0200",
+      "timeSpentSeconds": 7200
+    }
+  ],
+  "ALPHA-5": [
+    {
+      "id": "w6",
+      "issueKey": "ALPHA-5",
+      "author": {
+        "accountId": "acc-builder",
+        "displayName": "Builder Developer",
+        "emailAddress": "dev1@example.com"
+      },
+      "started": "2026-10-02T09:00:00.000+0200",
+      "timeSpentSeconds": 3600
+    }
+  ],
+  "ALPHA-6": [
+    {
+      "id": "w7",
+      "issueKey": "ALPHA-6",
+      "author": {
+        "accountId": "acc-unknown",
+        "displayName": "Unknown Person"
+      },
+      "started": "2026-10-03T09:00:00.000+0200",
+      "timeSpentSeconds": 5400
+    }
+  ],
+  "BETA-3": [
+    {
+      "id": "w8",
+      "issueKey": "BETA-3",
+      "author": {
+        "accountId": "acc-builder",
+        "displayName": "Builder Developer",
+        "emailAddress": "dev1@example.com"
+      },
+      "started": "2026-10-04T09:00:00.000+0200",
+      "timeSpentSeconds": 21600
+    }
+  ],
+  "INT-1": [
+    {
+      "id": "w9",
+      "issueKey": "INT-1",
+      "author": {
+        "accountId": "acc-reviewer",
+        "displayName": "Reviewer Dev"
+      },
+      "started": "2026-10-02T09:00:00.000+0200",
+      "timeSpentSeconds": 7200
+    }
+  ]
+}
