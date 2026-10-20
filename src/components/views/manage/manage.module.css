@@ -1,0 +1,22 @@
+.picker { width: 264px; max-width: calc(100vw - 24px); padding: 8px 0; }
+.pickerHead { padding: 6px 16px 8px; font-size: 14px; color: var(--app-text-secondary); }
+.pickerGrid { display: flex; flex-direction: column; }
+.pickerItem { display: flex; gap: 8px; align-items: center; border: 0; background: transparent; text-align: left; padding: 6px 16px; height: 32px; cursor: pointer; color: var(--app-text); }
+.pickerItem:hover { background: #e6f0ff; }
+.pickerIcon { flex: 0 0 18px; height: 18px; display: inline-flex; align-items: center; justify-content: center; color: #676879; }
+.pickerText { display: flex; flex-direction: column; min-width: 0; }
+.pickerName { font-size: 14px; font-weight: 400; }
+.pickerDesc { display: none; }
+
+.tabs { display: flex; align-items: center; gap: 2px; border-bottom: 1px solid var(--app-border-soft); margin-top: 4px; flex-wrap: nowrap; overflow-x: auto; }
+.tab { display: inline-flex; align-items: center; gap: 6px; padding: 8px 10px; cursor: pointer; font-size: 14px; border-bottom: 2px solid transparent; margin-bottom: -1px; color: var(--app-text); border-radius: 4px 4px 0 0; white-space: nowrap; user-select: none; }
+.tab:hover { background: #f5f6f8; }
+.tabActive { border-bottom-color: var(--app-primary); }
+.tabDragging { opacity: 0.6; background: #e6f0ff; }
+.tabMenu { border: 0; background: transparent; cursor: pointer; display: inline-flex; padding: 2px; border-radius: 4px; }
+.tabMenu:hover { background: #e6e9ef; }
+.tabPlus { border: 0; background: transparent; cursor: pointer; display: inline-flex; padding: 6px; border-radius: 4px; color: var(--app-text-secondary); }
+.tabPlus:hover { background: #e6e9ef; }
+.renameInput { font: inherit; border: 1px solid var(--app-primary); border-radius: 4px; padding: 0 4px; outline: none; width: 140px; }
+.defaultDot { font-size: 11px; color: var(--app-text-secondary); }
+.copied { position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%); background: #323338; color: #fff; padding: 8px 14px; border-radius: 6px; z-index: 2000; font-size: 14px; }

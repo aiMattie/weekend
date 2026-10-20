@@ -1,0 +1,26 @@
+.page { padding: 24px 32px; max-width: 1100px; overflow: auto; height: 100%; }
+.title { margin: 0 0 4px; font-size: 24px; font-weight: 600; }
+.sub { color: var(--secondary-text-color); margin: 0 0 16px; max-width: 760px; }
+.badge { display: inline-block; background: var(--positive-color-selected, #e5f7ec); color: var(--primary-text-color); border-radius: 4px; padding: 2px 8px; font-size: 13px; margin-bottom: 16px; }
+.form { display: grid; gap: 12px; padding: 16px; border: 1px solid var(--ui-border-color); border-radius: 8px; margin-bottom: 24px; }
+.row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.input { width: 100%; max-width: 420px; padding: 6px 10px; border: 1px solid var(--ui-border-color); border-radius: 4px; font: inherit; }
+.h2 { font-size: 18px; margin: 24px 0 8px; font-weight: 600; }
+.table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.table th, .table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--ui-border-color); }
+.num { text-align: right !important; font-variant-numeric: tabular-nums; }
+.list { margin: 0; padding-left: 18px; max-height: 260px; overflow: auto; font-size: 13px; }
+.diff { font-family: ui-monospace, monospace; font-size: 12px; max-height: 260px; overflow: auto; background: var(--allgrey-background-color, #f6f7fb); padding: 8px; border-radius: 4px; white-space: pre-wrap; }
+.err { color: var(--negative-color); margin: 8px 0; }
+.link { background: none; border: 0; color: var(--primary-color); cursor: pointer; padding: 0; font: inherit; }
+.running { color: var(--secondary-text-color); margin: 8px 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 8px; }
+.cards > .form { margin-bottom: 0; align-content: start; }
+.h3 { font-size: 16px; font-weight: 600; margin: 0; }
+.badgeOff { display: inline-block; background: var(--allgrey-background-color, #f6f7fb); color: var(--secondary-text-color); border-radius: 4px; padding: 2px 8px; font-size: 13px; }
+.meta { display: grid; gap: 6px; font-size: 14px; color: var(--secondary-text-color); }
+.fields { display: grid; gap: 8px; font-size: 14px; }
+.fields label { display: grid; gap: 4px; }
+.hint { margin: 0; font-size: 13px; color: var(--secondary-text-color); }
+.select { padding: 4px 8px; border: 1px solid var(--ui-border-color); border-radius: 4px; font: inherit; background: var(--primary-background-color); color: var(--primary-text-color); }
+.divider { border-top: 1px solid var(--ui-border-color); margin: 4px 0; }

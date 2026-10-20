@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1791317418849,
+      "tag": "0000_import_jobs_and_external_refs",
+      "breakpoints": true
+    }
+  ]
+}

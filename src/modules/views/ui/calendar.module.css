@@ -1,0 +1,30 @@
+.grid { border: 1px solid var(--app-border); border-radius: 8px; overflow: hidden; background: #fff; }
+.head { display: grid; background: #f5f6f8; border-bottom: 1px solid var(--app-border); }
+.headCell { padding: 6px 8px; font-size: 14px; color: var(--app-text); text-align: center; text-transform: capitalize; border-right: 1px solid var(--app-border-soft); }
+.headCell:last-child { border-right: 0; }
+.week { position: relative; border-bottom: 1px solid var(--app-border-soft); }
+.week:last-child { border-bottom: 0; }
+.cells { position: absolute; inset: 0; display: grid; }
+.cell { border-right: 1px solid var(--app-border-soft); padding: 4px 6px; cursor: pointer; min-width: 0; }
+.cell:last-child { border-right: 0; }
+.cell:hover { background: #fafbfc; }
+.otherMonth { background: #f9f9fb; color: var(--app-text-secondary); }
+.today { background: #eaf3ff; }
+.dayNum { font-size: 13px; display: block; text-align: right; color: var(--app-text-secondary); }
+.today .dayNum { background: var(--app-primary); color: #fff; border-radius: 4px; padding: 1px 6px; width: fit-content; margin-left: auto; }
+.layer { position: absolute; inset: 0; pointer-events: none; }
+.event { position: absolute; height: 22px; display: flex; align-items: center; color: #fff; font-size: 13px; padding: 0 8px; cursor: grab; pointer-events: auto; overflow: hidden; touch-action: none; user-select: none; box-shadow: 0 1px 2px rgba(0,0,0,0.15); }
+.eventDrag { opacity: 0.85; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 3; cursor: grabbing; }
+.eventText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; flex: 1; }
+.handle { position: absolute; top: 0; bottom: 0; width: 8px; cursor: ew-resize; }
+.handleL { left: 0; }
+.handleR { right: 0; }
+.handle:hover { background: rgba(0,0,0,0.2); }
+.dragging .event { pointer-events: none; }
+.dragging .eventDrag { pointer-events: none; }
+.addForm { padding: 10px; display: flex; flex-direction: column; gap: 6px; min-width: 220px; }
+.addInput { font: inherit; padding: 6px 8px; border: 1px solid var(--app-primary); border-radius: 4px; outline: none; }
+
+.legend { display: flex; gap: 20px; justify-content: center; padding: 12px 0 4px; font-size: 13px; flex-wrap: wrap; }
+.legendItem { display: inline-flex; align-items: center; gap: 6px; }
+.legendItem i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }

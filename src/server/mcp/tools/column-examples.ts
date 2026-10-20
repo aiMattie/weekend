@@ -1,0 +1,22 @@
+/** Example value shapes per column type (get_column_type_info). */
+export const COLUMN_EXAMPLES: Record<string, unknown> = {
+  text: "Some text",
+  long_text: { text: "Long text" },
+  numbers: 42,
+  status: { label: "Done" },
+  date: { date: "2026-10-12", time: "09:30:00" },
+  timeline: { from: "2026-10-01", to: "2026-10-14" },
+  people: { personsAndTeams: [{ id: 123, kind: "person" }] },
+  dropdown: { labels: ["Option A", "Option B"] },
+  checkbox: { checked: "true" },
+  link: { url: "https://example.com", text: "Example" },
+  email: { email: "name@example.com", text: "Name" },
+  phone: { phone: "+31612345678", countryShortName: "NL" },
+  rating: { rating: 4 },
+  week: { week: { startDate: "2026-10-05", endDate: "2026-10-11" } },
+  board_relation: { item_ids: [1234567890] },
+  tags: { tag_ids: [1] },
+  file: { files: [{ name: "doc.pdf", linkToFile: "https://example.com/doc.pdf", fileType: "LINK" }] },
+  mirror: "(read only, computed from a connected board)",
+  formula: "(read only, computed)",
+};

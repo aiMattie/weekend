@@ -1,0 +1,46 @@
+/* App frame (1680x960, DPR 1): topbar 48px + 1px border, rail 72px, sidebar 278px */
+.app { display: flex; flex-direction: column; height: 100vh; background: #fff; overflow: hidden; }
+.body { display: flex; flex: 1; min-height: 0; background: #f6f7fb; }
+.main { flex: 1; min-width: 0; min-height: 0; background: #fff; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+
+/* top bar */
+.topbar { height: 49px; flex: none; display: flex; align-items: center; padding: 0 16px 0 24px; background: #f6f7fb; border-bottom: 1px solid #e3e7f4; position: relative; z-index: 20; }
+.topLeft { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+.glyph { display: flex; align-items: center; }
+.vsep { width: 1px; height: 20px; background: #dcdfec; flex: none; }
+.upgrade { display: inline-flex; align-items: center; gap: 6px; color: #0073ea; font-size: 14px; font-weight: 500; padding: 4px 6px; border-radius: 4px; }
+.upgrade:hover { background: #e6e9ef; }
+.topCenter { width: 400px; max-width: 34vw; flex: none; }
+.topRight { display: flex; align-items: center; justify-content: flex-end; gap: 2px; flex: 1; min-width: 0; }
+.iconLink { position: relative; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; color: #323338; border: 0; background: transparent; cursor: pointer; padding: 0; }
+.iconLink:hover { background: #e6e9ef; }
+.badge { position: absolute; top: -4px; right: -2px; min-width: 16px; height: 16px; border-radius: 8px; background: #fff; color: #323338; font-size: 11px; display: flex; align-items: center; justify-content: center; padding: 0 3px; box-shadow: 0 0 0 1px #e3e7f4; }
+.avatarBtn { margin-left: 6px; border: 0; background: transparent; padding: 0; border-radius: 50%; cursor: pointer; display: inline-flex; }
+.avatarBtn:hover { box-shadow: 0 0 0 3px #e6e9ef; }
+.userMenu { min-width: 220px; padding: 8px 0; }
+.userMenuHeader { padding: 8px 16px 12px; border-bottom: 1px solid #e6e9ef; margin-bottom: 4px; }
+.userName { font-weight: 600; }
+.userEmail { font-size: 12px; color: #676879; }
+/* the admin module's search box is a Vibe Search: make it a grey pill */
+.topCenter [role="search"] { background-color: #e8e8ed; border-color: transparent; border-radius: 16px; height: 32px; min-height: 32px; }
+.topCenter [role="search"]:hover { background-color: #dcdfec; border-color: transparent; }
+.topCenter [role="search"]:has(input:focus) { background-color: #fff; border-color: #0073ea; }
+.topCenter input { background-color: transparent !important; border-color: transparent !important; }
+
+/* rail */
+.rail { width: 72px; flex: none; display: flex; flex-direction: column; align-items: stretch; padding: 8px 4px 8px; background: #f6f7fb; border-right: 1px solid #e7e9ef; overflow-y: auto; overflow-x: hidden; scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
+.railGroup { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.railSep { height: 1px; background: #dcdfec; margin: 10px 14px; flex: none; }
+.railItem { width: 64px; padding: 6px 0 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; color: #323338; font-size: 11px; line-height: 1.2; cursor: pointer; border: 0; background: transparent; border-radius: 8px; }
+.railIcon { width: 40px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #676879; }
+.railItem:hover .railIcon { background: #e6e9ef; }
+.railActive .railIcon { background: #cce5ff; color: #323338; }
+.railActive { color: #323338; }
+.railLabel { max-width: 64px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #676879; }
+.railActive .railLabel { color: #323338; }
+.railSpacer { flex: 1; }
+
+/* collapsed sidebar: small round expand button on the edge */
+.expand { position: absolute; left: -1px; top: 14px; z-index: 30; width: 24px; height: 24px; border-radius: 0 12px 12px 0; border: 1px solid #d0d4e4; border-left: 0; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #676879; padding: 0; }
+.expand:hover { color: #0073ea; background: #e6f0ff; }

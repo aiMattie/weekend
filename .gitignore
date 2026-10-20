@@ -1,0 +1,27 @@
+node_modules/
+.env
+.next/
+dist/
+build/
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+/out/
+/coverage/
+/data/
+.next-*/
+test-results/
+playwright-report/
+*.db
+*.db-wal
+*.db-shm
+/uploads/
+client_secret_*.json
+.deployed-sha
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+test-results-*/
+
+# generated screenshots (e2e / npm run manuals)
+docs/design/tableux/
+docs/handleiding/img/

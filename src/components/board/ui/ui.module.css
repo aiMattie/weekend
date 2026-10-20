@@ -1,0 +1,53 @@
+.popover {
+  position: fixed;
+  z-index: 10500; /* above Vibe modals (10000) so palettes opened inside a dialog stay clickable */
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  min-width: 160px;
+  max-width: 420px;
+  max-height: 70vh;
+  overflow: auto;
+}
+.menu {
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  min-width: 200px;
+}
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 7px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--app-text);
+  cursor: pointer;
+}
+.menuItem:hover:not(:disabled) { background: #e6e9ef; }
+.menuItem:disabled { opacity: 0.5; cursor: default; }
+.menuActive { background: var(--app-hover); color: var(--app-primary); }
+.danger { color: #d83a52; }
+.menuIcon { display: inline-flex; color: var(--app-text-secondary); }
+.menuDivider { height: 1px; background: var(--app-border-soft); margin: 4px 0; }
+.menuTitle { padding: 6px 10px 2px; font-size: 12px; color: var(--app-text-secondary); text-transform: none; }
+
+.inlineText { display: inline-block; max-width: 100%; border-radius: 4px; padding: 0 4px; border: 1px solid transparent; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.inlineEditable { cursor: text; }
+.inlineEditable:hover { border-color: var(--app-border); }
+.inlineInput {
+  font: inherit;
+  color: inherit;
+  width: 100%;
+  border: 1px solid var(--app-primary);
+  border-radius: 4px;
+  padding: 0 4px;
+  outline: none;
+  background: #fff;
+  resize: none;
+}
+.placeholder { color: var(--app-text-secondary); }

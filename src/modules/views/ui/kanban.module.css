@@ -1,0 +1,16 @@
+.lanes { display: flex; gap: 14px; align-items: flex-start; padding: 4px 2px 16px; min-height: 100%; }
+.lane { flex: 0 0 264px; background: #f5f6f8; border-radius: 8px; display: flex; flex-direction: column; max-height: 100%; transition: box-shadow 0.1s; }
+.laneCollapsed { flex-basis: 56px; }
+.laneOver { box-shadow: 0 0 0 2px var(--app-primary); }
+.laneHead { display: flex; align-items: center; gap: 6px; color: #fff; padding: 10px 12px; border-radius: 4px 4px 0 0; cursor: pointer; font-weight: 500; font-size: 16px; user-select: none; }
+.laneCollapsed .laneHead { border-radius: 8px; }
+.laneTitle { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.laneCollapsed .laneTitle { display: none; }
+.laneCount { font-size: 14px; font-weight: 400; opacity: 0.9; }
+.laneBody { padding: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; min-height: 60px; }
+.cardWrap { touch-action: none; }
+.dragging { opacity: 0.35; }
+.overlay { width: 260px; cursor: grabbing; box-shadow: 0 8px 24px rgba(0,0,0,0.25); border-radius: 6px; }
+.addBtn { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; padding: 6px 4px; cursor: pointer; color: var(--app-text-secondary); font-size: 14px; border-radius: 4px; }
+.addBtn:hover { background: #e6e9ef; color: var(--app-text); }
+.addInput { font: inherit; padding: 8px 10px; border: 1px solid var(--app-primary); border-radius: 6px; outline: none; }

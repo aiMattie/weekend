@@ -1,0 +1,11 @@
+{
+  "id": "migration.uren-nieuwe-regel",
+  "name": { "nl": "Urenregistratie: nieuwe regel, Wie = jijzelf en Datum = vandaag", "en": "Time entry: new row, Who = you and Date = today" },
+  "description": { "nl": "een nieuwe regel op het bord Urenregistratie krijgt automatisch de aanmaker als Wie en vandaag als Datum, zodat je via het snelle formulier alleen klant, fase en uren invult.", "en": "a new row on Urenregistratie gets its creator as Wie and today as Datum." },
+  "board": "Urenregistratie",
+  "trigger": { "type": "item_created", "config": {} },
+  "steps": [
+    { "type": "action", "block": "assign_person", "config": { "columnId": "wie", "userIds": ["@creator"], "mode": "replace" } },
+    { "type": "action", "block": "set_date", "config": { "columnId": "datum", "base": "now", "offsetValue": 0, "offsetUnit": "days" } }
+  ]
+}

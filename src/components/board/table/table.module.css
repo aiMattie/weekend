@@ -1,0 +1,124 @@
+.scroll { --bd: #d0d4e4; flex: 1; min-height: 0; overflow: auto; background: #fff; padding: 8px 0 120px 28px; position: relative; }
+.table { width: max-content; min-width: calc(100% - 28px); padding-right: 28px; }
+.empty { padding: 48px; text-align: center; color: var(--app-text-secondary); }
+
+.group { margin-bottom: 40px; }
+.groupHeader { display: flex; align-items: center; gap: 4px; height: 40px; position: sticky; left: 0; width: max-content; padding-right: 16px; }
+.groupHeaderInner { display: flex; align-items: center; gap: 6px; position: sticky; left: 0; }
+.chevron { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border: 0; background: transparent; border-radius: 4px; cursor: pointer; padding: 0; }
+.chevron:hover { background: #e6e9ef; }
+.chevronIcon { transition: transform 0.15s; }
+.chevronCollapsed { transform: rotate(-90deg); }
+.groupTitle { font-size: 18px; font-weight: 500; line-height: 1.2; margin-left: 2px; }
+.groupCount { font-size: 13px; color: #9699a6; margin-left: 8px; white-space: nowrap; visibility: hidden; }
+.groupHeader:hover .groupCount, .groupCountShown { visibility: visible; }
+.groupMenu { opacity: 0; }
+.groupHeader:hover .groupMenu, .groupMenu:focus-within { opacity: 1; }
+
+.row { display: grid; align-items: stretch; height: 36px; position: relative; }
+.headerRow { height: 36px; position: sticky; top: 0; z-index: 6; background: #fff; }
+.headerRow .strip { border-top-left-radius: 6px; }
+.addRow .strip { border-bottom-left-radius: 6px; }
+.left { position: sticky; left: 0; z-index: 3; display: flex; align-items: stretch; background: #fff; }
+.strip { width: 6px; flex: none; }
+.check { width: 34px; flex: none; display: flex; align-items: center; justify-content: flex-end; gap: 2px; padding-right: 5px; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); background: #fff; box-sizing: border-box; }
+.headerRow .check, .headerRow .chatHead { border-top: 1px solid var(--bd); }
+.row:hover .check, .row:hover .nameCell, .row:hover .chatCell, .row:hover .left { background: #f5f6f8; }
+.row:hover .cell { background-color: #f5f6f8; }
+.rowOpen .check, .rowOpen .nameCell, .rowOpen .chatCell, .rowOpen .left { background: var(--app-hover); }
+.rowOpen .cell { background-color: var(--app-hover); }
+.rowSelected .check, .rowSelected .nameCell, .rowSelected .chatCell, .rowSelected .left { background: #cce5ff; }
+.rowCheckbox { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; margin: 0; border: 1px solid #c3c6d4; border-radius: 3px; background: #fff; cursor: pointer; flex: none; position: relative; }
+.rowCheckbox:hover { border-color: #676879; }
+.rowCheckbox:checked, .rowCheckbox:indeterminate { background: var(--app-primary); border-color: var(--app-primary); }
+.rowCheckbox:checked::after { content: ""; position: absolute; left: 4px; top: 1px; width: 4px; height: 8px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.rowCheckbox:indeterminate::after { content: ""; position: absolute; left: 3px; top: 6px; width: 8px; height: 2px; background: #fff; }
+.rowCheckbox:disabled { opacity: 0.5; cursor: default; }
+
+.nameCell { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; padding: 0 6px 0 6px; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; background: #fff; }
+.chatCell { width: 65px; flex: none; display: flex; align-items: center; justify-content: center; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; background: #fff; }
+.row:hover .chatCell, .rowOpen .chatCell { background: inherit; }
+.subBadge { flex: none; font-size: 12px; color: #676879; background: #f0f1f5; border-radius: 4px; min-width: 18px; height: 18px; padding: 0 5px; display: inline-flex; align-items: center; justify-content: center; }
+.nameText { flex: 1; min-width: 0; font-size: 14px; overflow: hidden; }
+.expand { width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border: 0; background: transparent; border-radius: 4px; cursor: pointer; padding: 0; color: var(--app-text-secondary); flex: none; }
+.expand:hover { background: #e6e9ef; }
+.expandSpacer { width: 22px; flex: none; }
+.rowMenu { opacity: 0; flex: none; }
+.row:hover .rowMenu, .rowMenu:focus-within { opacity: 1; }
+.bubble { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 28px; border: 0; background: transparent; cursor: pointer; color: #9699a6; border-radius: 4px; flex: none; padding: 0; }
+.bubble:hover { background: #e6e9ef; }
+.bubbleActive { color: var(--app-primary); }
+.bubbleCount { position: absolute; top: 1px; right: 0; background: var(--app-primary); color: #fff; font-size: 10px; min-width: 14px; height: 14px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center; padding: 0 3px; }
+.openBtn { opacity: 0; font-size: 12px; border: 1px solid var(--app-border); border-radius: 4px; background: #fff; padding: 1px 6px; cursor: pointer; flex: none; color: var(--app-text); }
+.row:hover .openBtn { opacity: 1; }
+
+.cell { border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; background-color: #fff; min-width: 0; position: relative; display: flex; align-items: stretch; font-size: 14px; }
+.cellEditable { cursor: pointer; }
+.cellEditing { z-index: 2; }
+.colHeader { display: flex; align-items: center; justify-content: center; position: relative; font-size: 14px; color: var(--app-text); border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); border-top: 1px solid var(--bd); box-sizing: border-box; padding: 0 6px; background: #fff; min-width: 0; }
+.colHeaderName { position: relative; background: #fff; display: flex; align-items: center; justify-content: center; padding: 0 8px; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); border-top: 1px solid var(--bd); box-sizing: border-box; flex: 1; min-width: 0; font-size: 14px; }
+.chatHead { width: 65px; flex: none; background: #fff; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; }
+.colTitle { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 0 1 auto; }
+.colMenuBtn { opacity: 0; position: absolute; right: 2px; top: 50%; transform: translateY(-50%); }
+.colHeader:hover .colMenuBtn, .colMenuBtn:focus-within { opacity: 1; }
+.resize { position: absolute; right: -3px; top: 0; bottom: 0; width: 6px; cursor: col-resize; z-index: 4; }
+.resize:hover { background: var(--app-primary); opacity: 0.5; }
+.addCol { display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--bd); border-top: 1px solid var(--bd); box-sizing: border-box; }
+.addColBtn { border: 0; background: transparent; cursor: pointer; width: 28px; height: 28px; border-radius: 4px; color: var(--app-text-secondary); display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+.addColBtn:hover { background: #e6e9ef; }
+
+.addRow .nameCell { color: #9699a6; cursor: text; }
+.addRow:hover .nameCell { background: #f5f6f8; }
+.addInput { width: 100%; font: inherit; border: 0; outline: none; background: transparent; color: var(--app-text); height: 100%; padding: 0 4px; }
+.addPlaceholder { padding: 0 4px; font-size: 14px; }
+.addRowCells { grid-column: 2 / -1; border-bottom: 1px solid var(--bd); }
+.addRow { box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.12); }
+.addRow .check { opacity: 0.55; }
+
+.summary { height: 36px; }
+.summary .check, .summary .nameCell, .summary .chatCell { border: 0; background: #fff; }
+.summaryCell { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; color: var(--app-text); min-width: 0; padding: 2px 6px; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; background: #fff; }
+.summaryLabel { font-size: 11px; line-height: 1; color: var(--app-text-secondary); }
+.bar { display: flex; height: 22px; width: 100%; border-radius: 3px; overflow: hidden; }
+.barSeg { height: 100%; min-width: 2px; }
+
+.subWrap { padding: 4px 0 8px 42px; position: sticky; left: 0; width: max-content; }
+.subTable { width: max-content; border-left: 4px solid var(--sub-color, #579bfc); border-radius: 4px 0 0 4px; }
+.subRow { display: grid; height: 34px; }
+.subHeader .subCell, .subHeader .subNameCell { color: var(--app-text-secondary); font-size: 13px; }
+.subNameCell { display: flex; align-items: center; gap: 4px; padding: 0 8px; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; background: #fff; min-width: 0; font-size: 14px; }
+.subRow:hover .subNameCell, .subRow:hover .subCell { background-color: #f5f6f8; }
+.subCell { display: flex; align-items: stretch; border-right: 1px solid var(--bd); border-bottom: 1px solid var(--bd); box-sizing: border-box; background-color: #fff; min-width: 0; justify-content: center; align-items: center; }
+.subRow .cellEditable { cursor: pointer; }
+
+/* ---- table-ux grid: drag and drop, focus, pinned, unread ---- */
+.dragHandle { width: 14px; height: 22px; padding: 0; border: 0; background: transparent; color: #9699a6; cursor: grab; opacity: 0; display: inline-flex; align-items: center; justify-content: center; flex: none; touch-action: none; }
+.row:hover .dragHandle, .subRow:hover .dragHandle, .dragHandle:focus-visible { opacity: 1; }
+.dragHandle:active { cursor: grabbing; }
+.dragOff { visibility: hidden; }
+.groupDragHandle { opacity: 0; cursor: grab; touch-action: none; }
+.groupHeader:hover .groupDragHandle { opacity: 1; }
+.rowDragging { opacity: 0.35; }
+.dropTop::after, .dropBottom::after { content: ""; position: absolute; left: 0; right: 0; height: 2px; background: var(--app-primary, #0073ea); z-index: 8; pointer-events: none; }
+.dropTop::after { top: -1px; }
+.dropBottom::after { bottom: -1px; }
+.group { position: relative; }
+.groupDropTop::before, .groupDropBottom::before { content: ""; position: absolute; left: 0; right: 0; height: 3px; background: var(--app-primary, #0073ea); z-index: 8; pointer-events: none; }
+.groupDropTop::before { top: -2px; }
+.groupDropBottom::before { bottom: -2px; }
+.groupHeaderOver { outline: 2px solid var(--app-primary, #0073ea); outline-offset: -2px; border-radius: 4px; }
+.dragCard { background: #fff; border: 1px solid var(--app-border); border-radius: 6px; padding: 6px 14px; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); font-size: 14px; max-width: 360px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.colWrap { display: flex; min-width: 0; touch-action: none; }
+.colWrap > * { flex: 1; min-width: 0; }
+.colDragging { opacity: 0.5; z-index: 20; }
+.pinnedWrap { display: flex; flex: none; min-width: 0; }
+.pinnedWrap > * { flex: 1; min-width: 0; }
+.pinnedSummary { flex: none; }
+.cellFocused { outline: 2px solid var(--app-primary, #0073ea); outline-offset: -2px; z-index: 2; }
+.unreadDot { position: absolute; top: 2px; left: 2px; width: 9px; height: 9px; border-radius: 50%; background: #0073ea; border: 2px solid #fff; box-sizing: content-box; }
+.addGroupBtn { border: 1px solid #c3c6d4; background: #fff; cursor: pointer; padding: 0 12px; height: 32px; color: var(--app-text); font-size: 14px; border-radius: 4px; }
+.addGroupBtn:hover { background: #f5f6f8; }
+.subName { flex: 1; min-width: 0; overflow: hidden; }
+.scroll:focus { outline: none; }
+
+.subHeader .subCell, .subHeader .subNameCell { border-top: 1px solid var(--bd); justify-content: center; }

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "weekend": {
+      "type": "http",
+      "url": "http://localhost:3058/api/mcp",
+      "headers": {
+        "Authorization": "Bearer ${WEEKEND_TOKEN}"
+      }
+    }
+  }
+}

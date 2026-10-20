@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --app-bg: #ffffff;
+  --app-surface: #ffffff;
+  --app-border: #d0d4e4;
+  --app-border-soft: #e6e9ef;
+  --app-text: #323338;
+  --app-text-secondary: #676879;
+  --app-primary: #0073ea;
+  --app-hover: #e6f0ff;
+  --app-gutter-bg: #f6f7fb;
+  --app-font: Figtree, Roboto, "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--app-bg);
+  color: var(--app-text);
+  font-family: var(--app-font);
+  font-size: 14px;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Tiptap @mentions (rendered both in the composer and in saved updates) */
+.mention { background: #cce5ff; color: #0060b9; border-radius: 4px; padding: 0 3px; font-weight: 500; }
+.mention-popup { position: fixed; z-index: 3000; background: #fff; border-radius: 8px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18); padding: 4px; display: flex; flex-direction: column; min-width: 180px; }
+.mention-item { border: 0; background: transparent; text-align: left; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; }
+.mention-item:hover, .mention-item.active { background: #e6f0ff; }
+
+/* @vibe/core Modal: ModalHeader/ModalContent carry no padding of their own (it comes from ModalBasicLayout, which we do not use). */
+[role="dialog"][aria-modal="true"] > [data-testid^="modal-header"] { width: 100%; padding: var(--space-32) 64px var(--space-16) var(--space-32); }
+[role="dialog"][aria-modal="true"] > [data-testid^="modal-content"] { padding: 0 var(--space-32) var(--space-16); overflow: auto; }

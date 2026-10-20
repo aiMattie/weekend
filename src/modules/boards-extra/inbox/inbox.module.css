@@ -1,0 +1,46 @@
+.layout { display: flex; flex: 1; min-height: 0; background: #fff; }
+.left { width: 420px; flex: none; border-right: 1px solid var(--app-border-soft); display: flex; flex-direction: column; min-height: 0; }
+.leftHead { padding: 20px 20px 8px; }
+.title { font-size: 24px; font-weight: 500; margin: 0 0 12px; display: flex; align-items: center; justify-content: space-between; }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.tab { border: 0; background: transparent; padding: 6px 10px; border-radius: 4px; font: inherit; font-size: 14px; color: var(--app-text-secondary); cursor: pointer; }
+.tab:hover { background: var(--app-gutter-bg); }
+.tabActive { background: var(--app-hover); color: var(--app-primary); font-weight: 500; }
+.tools { display: flex; gap: 8px; align-items: center; justify-content: space-between; padding: 4px 20px 8px; }
+.linkBtn { border: 0; background: transparent; color: var(--app-primary); font: inherit; font-size: 13px; cursor: pointer; padding: 2px 0; }
+.linkBtn:hover { text-decoration: underline; }
+.list { overflow: auto; flex: 1; }
+.row { position: relative; display: flex; gap: 10px; padding: 12px 20px 12px 28px; border-bottom: 1px solid var(--app-border-soft); cursor: pointer; text-align: left; width: 100%; background: #fff; border-left: 0; border-right: 0; border-top: 0; font: inherit; }
+.row:hover { background: var(--app-gutter-bg); }
+.rowSelected { background: var(--app-hover); }
+.rowSelected:hover { background: var(--app-hover); }
+.dot { position: absolute; left: 11px; top: 21px; width: 8px; height: 8px; border-radius: 50%; background: var(--app-primary); }
+.rowBody { flex: 1; min-width: 0; }
+.rowTitle { font-size: 14px; color: var(--app-text); overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.unread .rowTitle { font-weight: 600; }
+.rowSnippet { font-size: 13px; color: var(--app-text-secondary); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rowMeta { font-size: 12px; color: var(--app-text-secondary); margin-top: 4px; display: flex; gap: 6px; align-items: center; }
+.actions { display: none; position: absolute; right: 12px; top: 8px; background: #fff; border: 1px solid var(--app-border-soft); border-radius: 4px; padding: 2px; gap: 2px; }
+.row:hover .actions { display: flex; }
+.starred { color: #fdab3d; }
+.right { flex: 1; min-width: 0; overflow: auto; padding: 32px 40px; }
+.detailTitle { font-size: 20px; font-weight: 500; margin: 0 0 8px; }
+.detailMeta { color: var(--app-text-secondary); font-size: 13px; margin-bottom: 20px; }
+.card { border: 1px solid var(--app-border-soft); border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.cardHead { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 500; }
+.cardBody :where(p) { margin: 0 0 6px; }
+.cardBody :where(span[data-type="mention"]) { color: var(--app-primary); background: #e6f0ff; border-radius: 3px; padding: 0 2px; }
+.empty { padding: 40px 20px; text-align: center; color: var(--app-text-secondary); }
+.openBtn { display: inline-block; background: var(--app-primary); color: #fff; padding: 8px 14px; border-radius: 4px; text-decoration: none; font-size: 14px; }
+.openBtn:hover { filter: brightness(0.92); }
+.settingsGrid { display: grid; grid-template-columns: minmax(0, 1fr) 80px 80px; gap: 12px 8px; align-items: center; }
+.settingsHead { font-size: 13px; color: var(--app-text-secondary); text-align: center; }
+.settingsHead:first-child { text-align: left; }
+.toggleCell { display: flex; justify-content: center; }
+/* bell */
+.bellWrap { position: relative; display: inline-flex; }
+.badge { position: absolute; top: -2px; right: -2px; min-width: 16px; height: 16px; border-radius: 8px; background: #df2f4a; color: #fff; font-size: 11px; line-height: 16px; text-align: center; padding: 0 4px; pointer-events: none; font-weight: 600; }
+.bellPanel { width: 400px; max-height: 70vh; display: flex; flex-direction: column; }
+.bellHead { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--app-border-soft); font-weight: 600; }
+.bellList { overflow: auto; }
+.bellFoot { border-top: 1px solid var(--app-border-soft); padding: 10px 16px; text-align: center; }

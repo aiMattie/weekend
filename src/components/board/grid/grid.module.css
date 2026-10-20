@@ -1,0 +1,25 @@
+.bulkBar { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 900; display: flex; align-items: center; gap: 4px; background: #323338; color: #fff; border-radius: 8px; padding: 8px 12px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3); max-width: calc(100vw - 32px); }
+.bulkCount { display: flex; align-items: center; gap: 8px; padding: 0 12px 0 6px; font-size: 14px; border-right: 1px solid rgba(255, 255, 255, 0.2); margin-right: 4px; white-space: nowrap; }
+.bulkBadge { display: inline-flex; align-items: center; justify-content: center; min-width: 26px; height: 26px; border-radius: 6px; background: var(--app-primary, #0073ea); font-weight: 600; padding: 0 6px; }
+.bulkActions { display: flex; gap: 2px; flex-wrap: nowrap; }
+.bulkBtn { display: flex; flex-direction: column; align-items: center; gap: 2px; white-space: nowrap; border: 0; background: transparent; color: #fff; cursor: pointer; padding: 4px 10px; border-radius: 6px; font-size: 12px; min-width: 64px; }
+.bulkBtn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.14); }
+.bulkBtn:disabled { opacity: 0.4; cursor: default; }
+.bulkClose { border: 0; background: transparent; color: #fff; cursor: pointer; border-radius: 6px; padding: 6px; margin-left: 4px; display: inline-flex; }
+.bulkClose:hover { background: rgba(255, 255, 255, 0.14); }
+
+.toast { position: fixed; left: 24px; bottom: 24px; z-index: 950; display: flex; align-items: center; gap: 12px; background: #323338; color: #fff; border-radius: 8px; padding: 10px 16px; font-size: 14px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3); }
+.toast button { border: 0; background: transparent; color: #66ccff; cursor: pointer; font-size: 14px; padding: 0; text-decoration: underline; }
+.toastError { background: #d83a52; }
+.toastError button { color: #fff; }
+
+.picker { display: flex; flex-direction: column; gap: 4px; padding: 10px; min-width: 240px; max-width: 320px; }
+.pickerTitle { font-size: 12px; color: var(--app-text-secondary); padding: 2px 4px; }
+.pickerSearch { font: inherit; border: 1px solid var(--app-border); border-radius: 4px; padding: 6px 8px; outline: none; }
+.pickerSearch:focus { border-color: var(--app-primary); }
+.pickerList { display: flex; flex-direction: column; max-height: 220px; overflow: auto; }
+.pickerItem { text-align: left; border: 0; background: transparent; padding: 7px 8px; border-radius: 4px; cursor: pointer; font-size: 14px; display: flex; align-items: center; gap: 8px; color: var(--app-text); }
+.pickerItem:hover { background: #e6e9ef; }
+.pickerEmpty { padding: 8px; color: var(--app-text-secondary); font-size: 13px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.muted { color: var(--app-text-secondary); font-size: 12px; margin-left: auto; }

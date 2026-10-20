@@ -1,0 +1,37 @@
+.scroller { user-select: none; overflow: auto; border: 1px solid var(--app-border); border-radius: 8px; background: #fff; height: 100%; min-height: 240px; position: relative; }
+.inner { position: relative; min-height: 100%; }
+.header { display: flex; position: sticky; top: 0; z-index: 6; background: #f5f6f8; border-bottom: 1px solid var(--app-border); }
+.corner { position: sticky; left: 0; z-index: 7; background: #f5f6f8; border-right: 1px solid var(--app-border); flex: 0 0 auto; }
+.axis { position: relative; flex: 0 0 auto; }
+.axisRow { position: relative; height: 26px; }
+.axisCell { position: absolute; top: 0; bottom: 0; border-right: 1px solid var(--app-border-soft); padding: 4px 6px; font-size: 12px; color: var(--app-text-secondary); overflow: hidden; white-space: nowrap; text-transform: capitalize; }
+.axisSub { border-top: 1px solid var(--app-border-soft); text-align: center; padding: 4px 0; }
+.weekendHead { background: #eceef2; }
+.body { position: relative; }
+.row { display: flex; border-bottom: 1px solid var(--app-border-soft); }
+.groupRow { background: #fafbfc; font-weight: 600; }
+.label { position: sticky; left: 0; z-index: 5; background: inherit; background-color: #fff; flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-right: 1px solid var(--app-border); border-left: 4px solid transparent; font-size: 14px; cursor: pointer; overflow: hidden; }
+.groupRow .label { background: #fafbfc; }
+.label:hover { background: #f5f6f8; }
+.labelText { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.track { position: relative; flex: 0 0 auto; }
+.weekend { position: absolute; top: 0; bottom: 0; background: #f7f8fa; }
+.bar { position: absolute; top: 6px; height: 24px; border-radius: 6px; color: #fff; font-size: 13px; display: flex; align-items: center; padding: 0 10px; overflow: visible; cursor: grab; touch-action: none; user-select: none; box-shadow: 0 1px 2px rgba(0,0,0,0.2); z-index: 2; }
+.barDrag { cursor: grabbing; opacity: 0.85; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 3; }
+.barText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; pointer-events: none; }
+.critical { box-shadow: 0 0 0 2px rgba(223,47,74,0.35); }
+.milestone { position: absolute; top: 9px; width: 18px; height: 18px; transform: rotate(45deg); border-radius: 3px; cursor: grab; z-index: 2; box-shadow: 0 1px 2px rgba(0,0,0,0.25); touch-action: none; }
+.baseline { position: absolute; top: 31px; height: 4px; border-radius: 2px; background: #9d9fae; opacity: 0.8; }
+.handle { position: absolute; top: 0; bottom: 0; width: 9px; cursor: ew-resize; z-index: 3; }
+.handleL { left: 0; }
+.handleR { right: 0; }
+.handle:hover { background: rgba(0,0,0,0.25); }
+.today { position: absolute; top: 0; bottom: 0; width: 2px; background: #df2f4a; z-index: 4; pointer-events: none; opacity: 0.8; }
+.links { position: absolute; top: 0; z-index: 1; pointer-events: none; overflow: visible; }
+
+.connector { position: absolute; right: -18px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: #fff; border: 2px solid #0073ea; cursor: crosshair; opacity: 0; z-index: 4; }
+.bar:hover .connector, .milestone:hover .connector { opacity: 1; }
+.milestone .connector { right: -26px; }
+.link { pointer-events: stroke; cursor: pointer; }
+.link:hover { stroke-width: 3; }
+.linking { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 2000; }

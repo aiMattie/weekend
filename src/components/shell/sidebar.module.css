@@ -1,0 +1,48 @@
+/* Workspace sidebar (278px, white, right border #e7e9ef). Owner: table-ux (chrome). */
+.sidebar { position: relative; z-index: 30; width: 278px; flex: none; background: #fff; border-right: 1px solid #e7e9ef; display: flex; flex-direction: column; min-height: 0; transition: width .15s ease; }
+.sidebarCollapsed { width: 0; overflow: hidden; border-right: 0; }
+.sidebarInner { display: flex; flex-direction: column; min-height: 0; flex: 1; width: 278px; }
+
+.head { display: flex; align-items: center; gap: 2px; padding: 14px 16px 0 18px; height: 50px; flex: none; }
+.headTitle { flex: 1; font-size: 14px; color: #676879; }
+.iconBtn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border: 0; background: transparent; border-radius: 4px; cursor: pointer; color: #323338; padding: 0; }
+.iconBtn:hover { background: #e6e9ef; }
+
+.wsRow { display: flex; align-items: center; gap: 8px; padding: 6px 16px 8px 18px; flex: none; }
+.wsSelect { flex: 1; min-width: 0; position: relative; }
+.wsButton { display: flex; align-items: center; gap: 8px; width: 100%; height: 40px; padding: 0 10px 0 8px; border: 1px solid #c3c6d4; border-radius: 4px; background: #fff; cursor: pointer; font: inherit; font-size: 14px; color: #323338; text-align: left; }
+.wsButton:hover { background: #f5f6f8; }
+.wsBadge { width: 22px; height: 22px; border-radius: 4px; color: #fff; font-weight: 500; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.wsName { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.plusBtn { width: 40px; height: 40px; flex: none; border: 1px solid #c3c6d4; border-radius: 4px; background: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; color: #323338; }
+.plusBtn:hover { background: #f5f6f8; }
+.plusBtn > * { display: inline-flex; align-items: center; justify-content: center; }
+
+.filterRow { padding: 0 16px 8px 18px; flex: none; }
+
+.contentHead { display: flex; align-items: center; gap: 2px; padding: 10px 14px 4px 18px; flex: none; }
+.contentTitle { flex: 1; font-size: 13px; font-weight: 600; color: #323338; }
+
+.scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 0 8px 12px 10px; }
+.sideLink { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px; border-radius: 4px; font-size: 14px; color: #323338; cursor: pointer; }
+.sideLink:hover { background: #f0f1f5; }
+.sideLinkActive, .sideLinkActive:hover { background: #cce5ff; }
+.sideIcon { flex: none; color: #676879; }
+
+.tree { padding: 0; }
+.treeFolder { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 8px; border-radius: 4px; cursor: pointer; font-size: 14px; color: #323338; }
+.treeFolder:hover { background: #f0f1f5; }
+.treeChildren { padding-left: 16px; }
+.boardRow { display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 8px; border-radius: 4px; font-size: 14px; color: #323338; position: relative; }
+.boardRow:hover { background: #f0f1f5; }
+.boardRowActive, .boardRowActive:hover { background: #cce5ff; }
+.boardName { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.boardIcon { flex: none; color: #676879; }
+.rowMenu { opacity: 0; flex: none; }
+.boardRow:hover .rowMenu, .treeFolder:hover .rowMenu, .rowMenu[data-open="true"], .rowMenu:focus-within { opacity: 1; }
+.emptyHint { padding: 6px 8px; color: #676879; font-size: 13px; }
+
+.sectionHeader { display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 6px; font-size: 13px; font-weight: 600; color: #323338; cursor: pointer; border: 0; background: transparent; width: 100%; text-align: left; border-radius: 4px; margin-top: 8px; }
+.sectionHeader:hover { background: #f0f1f5; }
+.sectionList { padding: 0; }
+.divider { height: 1px; background: #e7e9ef; margin: 10px 8px 0; }

@@ -1,0 +1,38 @@
+.frame { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 0 28px 16px; background: #fff; }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 0; min-height: 44px; }
+.barLeft { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.barBtn { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 14px; color: var(--app-text); }
+.barBtn:hover { background: #e6e9ef; }
+.barBtnActive { background: #cce5ff; color: var(--app-primary); }
+.content { flex: 1; min-height: 0; overflow: auto; position: relative; }
+.segmented { display: inline-flex; border: 1px solid var(--app-border); border-radius: 4px; overflow: hidden; }
+.segmented button { border: 0; background: #fff; padding: 5px 12px; font-size: 14px; cursor: pointer; color: var(--app-text); border-right: 1px solid var(--app-border); }
+.segmented button:last-child { border-right: 0; }
+.segmented button:hover { background: #f5f6f8; }
+.segmented button[aria-pressed="true"] { background: #cce5ff; color: var(--app-primary); }
+.navBtn { border: 1px solid var(--app-border); background: #fff; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 14px; display: inline-flex; align-items: center; }
+.navBtn:hover { background: #f5f6f8; }
+.periodTitle { font-size: 18px; font-weight: 600; margin: 0 8px; text-transform: capitalize; min-width: 140px; }
+.muted { color: var(--app-text-secondary); font-size: 13px; }
+
+.emptyConfig { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 64px 24px; color: var(--app-text-secondary); text-align: center; }
+.emptyTitle { font-size: 16px; color: var(--app-text); max-width: 460px; }
+
+/* settings dialog */
+.settingsForm { display: flex; flex-direction: column; gap: 14px; min-width: 360px; }
+.settingsRow { display: grid; grid-template-columns: 200px 1fr; gap: 12px; align-items: start; font-size: 14px; }
+.settingsLabel { padding-top: 6px; color: var(--app-text); }
+.select, .numberInput { font: inherit; padding: 6px 8px; border: 1px solid var(--app-border); border-radius: 4px; background: #fff; min-width: 200px; }
+.numberInput { width: 100px; min-width: 0; }
+.checkList { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow: auto; }
+.checkItem { display: flex; gap: 8px; align-items: center; font-size: 14px; }
+
+/* cards (kanban, cards view, map) */
+.card { background: #fff; border-radius: 6px; border: 1px solid var(--app-border-soft); border-left: 4px solid #c4c4c4; box-shadow: 0 1px 3px rgba(0,0,0,0.08); padding: 10px 12px; cursor: pointer; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.card:hover { box-shadow: 0 3px 8px rgba(0,0,0,0.14); }
+.cardName { font-weight: 500; word-break: break-word; }
+.cardField { display: flex; align-items: center; gap: 8px; font-size: 13px; min-height: 22px; }
+.cardFieldLabel { color: var(--app-text-secondary); flex: 0 0 auto; max-width: 50%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cardFieldValue { flex: 1; min-width: 0; display: flex; justify-content: flex-end; overflow: hidden; }
+.cardFieldValue > * { max-width: 100%; }
+.cardFieldValueStart, .cardFieldValueStart > * { justify-content: flex-start !important; }

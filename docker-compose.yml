@@ -1,0 +1,25 @@
+name: weekend
+
+services:
+  app:
+    build: .
+    image: weekend:latest
+    container_name: weekend
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: file:data/app.db
+    ports:
+      - "${HOST_PORT:-3058}:3000"
+    volumes:
+      - data:/app/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/login"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+    restart: unless-stopped
+
+volumes:
+  data:

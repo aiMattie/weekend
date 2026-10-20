@@ -1,0 +1,8 @@
+.wrap { display: flex; gap: 24px; align-items: flex-start; padding: 8px 0 16px; flex-wrap: wrap; }
+.canvas { flex: 1 1 520px; min-width: 320px; height: 420px; }
+.title { font-size: 14px; color: var(--app-text-secondary); }
+.legend { border-collapse: collapse; font-size: 14px; min-width: 220px; }
+.legend td { padding: 6px 10px; border-bottom: 1px solid var(--app-border-soft); }
+.legend td:last-child { text-align: right; font-weight: 600; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 8px; }
+.empty { padding: 48px; color: var(--app-text-secondary); width: 100%; text-align: center; }
