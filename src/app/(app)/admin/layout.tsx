@@ -19,7 +19,6 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     can(actor, "account:security") && { id: "security", href: "/admin/security", labelKey: "admin.nav.security", group: "settings" },
     can(actor, "account:security") && { id: "sso", href: "/admin/sso", labelKey: "admin.nav.sso", group: "settings" },
     can(actor, "account:security") && { id: "saml", href: "/admin/security#security-sso", labelKey: "admin.nav.saml", group: "settings" },
-    (can(actor, "account:billing") || can(actor, "account:manage")) && { id: "billing", href: "/admin/billing", labelKey: "admin.nav.billing", group: "settings" },
     can(actor, "account:manage") && { id: "ai", href: "/admin/ai", labelKey: "ai.nav.admin", group: "settings" },
     can(actor, "account:audit") && { id: "audit", href: "/admin/audit", labelKey: "admin.nav.audit", group: "data" },
     actor.role !== "guest" && { id: "api", href: "/admin/api", labelKey: "platform.nav", group: "data" },

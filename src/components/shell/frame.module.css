@@ -8,8 +8,6 @@
 .topLeft { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
 .glyph { display: flex; align-items: center; }
 .vsep { width: 1px; height: 20px; background: #dcdfec; flex: none; }
-.upgrade { display: inline-flex; align-items: center; gap: 6px; color: #0073ea; font-size: 14px; font-weight: 500; padding: 4px 6px; border-radius: 4px; }
-.upgrade:hover { background: #e6e9ef; }
 .topCenter { width: 400px; max-width: 34vw; flex: none; }
 .topRight { display: flex; align-items: center; justify-content: flex-end; gap: 2px; flex: 1; min-width: 0; }
 .iconLink { position: relative; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 4px; color: #323338; border: 0; background: transparent; cursor: pointer; padding: 0; }

@@ -60,7 +60,7 @@ Instellingen op dezelfde pagina:
 
 - **Gasten toestaan**: zet je dit uit, dan kun je geen gasten meer uitnodigen.
 - **Gasten zien alleen vrijgegeven views**: een board owner kiest welke views een gast ziet.
-- **Gastenlimiet**: het aantal gasten hangt af van je plan (gasten per seat, zie hoofdstuk Abonnement).
+- **Gastenlimiet**: het aantal gasten hangt af van je plan (gasten per seat; standaard onbeperkt).
 
 ## 5. Eigen rollen
 
@@ -140,7 +140,7 @@ Loopt een Google-login stuk, dan staat op de loginpagina een duidelijke melding:
 
 **Buitengesloten?** Staat **Alleen inloggen met SSO** aan en kan niemand meer inloggen (Google niet bereikbaar, verkeerd account gekoppeld)? Een beheerder met toegang tot de server voert uit: `npm run auth:break-glass -- naam@example.com`. Dat zet de afdwinging uit en markeert die beheerder als noodtoegang; inloggen met een wachtwoord werkt dan weer. De afdwinging vervalt ook vanzelf zodra zowel Google als Microsoft niet meer geconfigureerd is. Zie ook [Veelgestelde vragen](15-veelgestelde-vragen.md).
 
-**Beperkingen bij Google- en Microsoft-login.** Geen SAML. Het aantal gebruikers wordt niet begrensd door je abonnement bij automatisch aanmaken. Uitloggen in deze app logt niet uit bij Google of Microsoft, en een gedeactiveerde Google- of Microsoft-gebruiker verliest pas toegang als hij hier gedeactiveerd wordt. Het redirect-adres moet precies overeenkomen met `APP_URL`: open de app dus via dat adres.
+**Beperkingen bij Google- en Microsoft-login.** Geen SAML. Het aantal gebruikers wordt niet begrensd bij automatisch aanmaken. Uitloggen in deze app logt niet uit bij Google of Microsoft, en een gedeactiveerde Google- of Microsoft-gebruiker verliest pas toegang als hij hier gedeactiveerd wordt. Het redirect-adres moet precies overeenkomen met `APP_URL`: open de app dus via dat adres.
 
 ### Inloggen met Microsoft
 
@@ -182,11 +182,7 @@ Bij een incident: **Beveiliging > Panic button > Account vergrendelen**.
 
 Voor een SIEM is er een JSON-API: `GET /api/v1/audit-log?event=board.deleted&from=2026-01-01&limit=200` met een sessie of API-token van iemand met auditrechten. Het antwoord bevat `rows`, `nextCursor` (geef die mee als `cursor` voor de volgende pagina) en `total`. Geheimen als wachtwoorden en tokens worden nooit bewaard.
 
-## 10. Abonnement
-
-**Beheer > Abonnement** toont je plan (Free, Basic, Standard, Pro of Enterprise) en het gebruik ten opzichte van de limieten: gasten per seat, automations per maand, integraties en views per board. Het standaardplan is **Enterprise** (onbeperkt). Het scherm is alleen lezen: er wordt niets afgerekend. Met **Kies dit plan** probeer je de limieten van een ander plan uit.
-
-## 11. Mijn profiel
+## 10. Mijn profiel
 
 Via je avatar rechtsboven > **Mijn profiel**.
 
@@ -196,7 +192,7 @@ Via je avatar rechtsboven > **Mijn profiel**.
 - **Google-account** en **Microsoft-account**: als inloggen met Google of Microsoft aan staat, zie je hier welk account gekoppeld is. **Koppelen** brengt je langs Google of Microsoft en terug; **Ontkoppelen** haalt de koppeling weg (dat kan niet als het je enige manier is om in te loggen).
 - **Actieve sessies**: je ziet je apparaten. **Afmelden** beëindigt één sessie, **Overal afmelden behalve hier** alle andere.
 
-## 12. Zoeken
+## 11. Zoeken
 
 De zoekbalk bovenaan zoekt in boards, items, updates, docs, workspaces en mensen, en laat alleen zien waar je toegang toe hebt.
 
@@ -204,4 +200,4 @@ De zoekbalk bovenaan zoekt in boards, items, updates, docs, workspaces en mensen
 2. Navigeer met de pijltjestoetsen, open met `Enter`, sluit met `Esc`.
 3. Zonder tekst zie je je recente zoekopdrachten.
 
-Beperkingen: SAML is een instellingenscherm zonder werkende koppeling met een identity provider (Google-login werkt wel, zie [Inloggen met Google](#inloggen-met-google)). Het scherm Abonnement is alleen lezen en rekent niets af.
+Beperkingen: SAML is een instellingenscherm zonder werkende koppeling met een identity provider (Google-login werkt wel, zie [Inloggen met Google](#inloggen-met-google)).

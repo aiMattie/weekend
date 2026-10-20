@@ -73,9 +73,6 @@ test("handleiding beheer en rechten: screenshots", async ({ page, request, brows
   await expect(page.getByTestId("security-panic")).toBeVisible();
   await shot(page, "beveiliging");
 
-  await go(page, "/admin/billing");
-  await expect(page.getByTestId("billing-usage")).toBeVisible();
-  await shot(page, "abonnement");
 
   // audit log with a deleted board
   const ws = (await (await page.request.get("/api/v1/workspaces")).json())[0].id;

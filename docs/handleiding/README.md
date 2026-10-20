@@ -20,7 +20,7 @@ Begin bij [Aan de slag](00-aan-de-slag.md) als je nieuw bent. Wil je weten hoe j
 | [Uren en Delivery](09-uren-en-delivery.md) | De workspace Delivery, uren schrijven in Urenregistratie, de klant-workspace en de checklist per klant |
 | [MCP en API](10-mcp-en-api.md) | API-tokens, GraphQL-API, API-explorer, AI-assistenten verbinden via MCP en webhooks |
 | [Import](11-import.md) | Gegevens uit monday.com overzetten met een dry-run, rapport en automatische synchronisatie |
-| [Beheer, rechten en beveiliging](12-beheer-en-rechten.md) | Gebruikers, teams, gasten, rollen, rechten, beveiliging, auditlog en abonnement |
+| [Beheer, rechten en beveiliging](12-beheer-en-rechten.md) | Gebruikers, teams, gasten, rollen, rechten, beveiliging en auditlog |
 | [AI: Sidekick, Weekend magic, agents en Notetaker](13-ai-sidekick-en-agents.md) | De AI-assistent, borden bouwen vanuit een beschrijving, AI-blokken, agents en gespreksverslagen |
 | [Werkafspraken](14-werkafspraken.md) | Een voorbeeldwerkwijze voor een team als stappen in de app, plus de checklist per klant |
 | [Veelgestelde vragen](15-veelgestelde-vragen.md) | Problemen oplossen, beperkingen, alle sneltoetsen en rollen |

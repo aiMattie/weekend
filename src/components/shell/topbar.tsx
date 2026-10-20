@@ -1,7 +1,7 @@
 "use client";
 
 import { Avatar, Icon } from "@vibe/core";
-import { Apps, Help, Inbox, Invite, LogOut, Person, Settings, Upgrade } from "@vibe/icons";
+import { Apps, Help, Inbox, Invite, LogOut, Person, Settings } from "@vibe/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,7 +48,7 @@ function Waffle() {
   );
 }
 
-/** Light grey top bar: logo + Upgrade, centered search pill, bell / inbox / invite / apps / help / grid / avatar. */
+/** Light grey top bar: logo, centered search pill, bell / inbox / invite / apps / help / grid / avatar. */
 export function TopBar(_props: { nav: NavData; onToggleSidebar: () => void }) { // eslint-disable-line @typescript-eslint/no-unused-vars
   const t = useT();
   const router = useRouter();
@@ -64,8 +64,6 @@ export function TopBar(_props: { nav: NavData; onToggleSidebar: () => void }) { 
     <header className={frame.topbar} data-testid="topbar">
       <div className={frame.topLeft}>
         <Link href="/" className={frame.glyph} aria-label="Weekend" data-testid="topbar-logo"><Glyph /></Link>
-        <span className={frame.vsep} />
-        <Link href="/admin" className={frame.upgrade} data-testid="topbar-upgrade"><Icon icon={Upgrade} size={18} ignoreFocusStyle /> {t("frame.upgrade")}</Link>
       </div>
       <div className={frame.topCenter}><GlobalSearch /></div>
       <div className={frame.topRight}>

@@ -1,6 +1,5 @@
 /** table-ux i18n: app frame (top bar, rail). nl is the source; en mirrors the same keys. */
 export const shellNl = {
-  "frame.upgrade": "Upgrade",
   "frame.workspaceRail": "Workspace",
   "frame.favoritesRail": "Favorites",
   "frame.moreRail": "More",
@@ -13,7 +12,6 @@ export const shellNl = {
   "frame.gridMenu": "Apps",
 } as const;
 export const shellEn: Record<keyof typeof shellNl, string> = {
-  "frame.upgrade": "Upgrade",
   "frame.workspaceRail": "Workspace",
   "frame.favoritesRail": "Favorites",
   "frame.moreRail": "More",

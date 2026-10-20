@@ -62,7 +62,6 @@ Dit is anders of ontbreekt:
 - **Integraties** zijn webhook-koppelingen (Slack, Microsoft Teams, GitHub, Bitbucket, Jira, Gmail, Outlook en een inkomende webhook). Er is geen inlogkoppeling met die diensten via een marketplace.
 - **Weekend dev** bevat sprints, backlog, burndown, velocity, Complete sprint, bugs, retrospectives en Git-koppeling. Wat in [Development](08-dev-sprints.md) staat is er.
 - **SSO**: inloggen met Google werkt (OAuth 2.0 / OpenID Connect). **SAML** is een stub: het scherm toont de gegevens van deze app, maar er wordt niets met een identity provider uitgewisseld. SCIM is niet aangesloten.
-- **Abonnement**: het scherm is alleen lezen. Er wordt niets afgerekend en het standaardplan blokkeert niets.
 - **Whiteboard** en **Workflow builder** zijn lichte uitvoeringen met de belangrijkste functies.
 - **AI** werkt via de Claude API en alleen als een beheerder een sleutel heeft ingesteld. Schrijfacties van Sidekick voer je pas uit nadat je ze hebt bevestigd.
 - **API en MCP**: alleen de GraphQL-types en MCP-tools uit [MCP en API](10-mcp-en-api.md) bestaan. Extra: tools voor agents, Notetaker en sprints.
@@ -125,7 +124,7 @@ Dit is anders of ontbreekt:
 
 | Wat | Wie mag het |
 |---|---|
-| Gebruikers uitnodigen, rollen, teams, gasten, beveiliging, auditlog, abonnement, AI-instellingen, import en sjablonen | accountbeheerders (rol **Admin**) |
+| Gebruikers uitnodigen, rollen, teams, gasten, beveiliging, auditlog, AI-instellingen, import en sjablonen | accountbeheerders (rol **Admin**) |
 | Structuur van een board (kolommen, groepen, views), leden en rechten van dat board | **board owners** en admins |
 | Items, updates en waarden bewerken | leden met bewerkrechten op het board |
 | Alleen kijken | **Viewer** of een lid met alleen-lezen rechten |

@@ -43,7 +43,7 @@ test("profile: details, avatar upload and password change", async ({ page, reque
   expect(errors.filter((e) => !/status of 40\d/.test(e)), errors.join("\n")).toEqual([]);
 });
 
-test("teams: create, add members, make owner; account settings and billing", async ({ page }) => {
+test("teams: create, add members, make owner and account settings", async ({ page }) => {
   const errors = collectConsoleErrors(page);
   await login(page, "admin");
   await go(page, "/admin/teams");
@@ -63,20 +63,13 @@ test("teams: create, add members, make owner; account settings and billing", asy
   await page.getByTestId("account-save").click();
   await expect(page.getByTestId("account-saved")).toBeVisible();
 
-  await go(page, "/admin/billing");
-  await expect(page.getByTestId("billing-usage")).toContainText("Enterprise".length ? "Gasten" : "");
-  await expect(page.getByTestId("usage-guests")).toContainText("∞");
-  await page.getByTestId("plan-free").click();
-  await expect(page.getByTestId("usage-guests")).toContainText("0");
-  await page.getByTestId("plan-enterprise").click();
-  await expect(page.getByTestId("usage-guests")).toContainText("∞");
   expect(errors, errors.join("\n")).toEqual([]);
 });
 
 test("admin center pages render for an admin and are closed to members", async ({ page, browser, baseURL }) => {
   const errors = collectConsoleErrors(page);
   await login(page, "admin");
-  for (const path of ["users", "teams", "guests", "roles", "account", "security", "audit", "billing"]) {
+  for (const path of ["users", "teams", "guests", "roles", "account", "security", "audit"]) {
     await go(page, `/admin/${path}`);
     await expect(page.getByTestId("admin-title")).toBeVisible();
   }
