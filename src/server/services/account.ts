@@ -1,11 +1,11 @@
 /** Admin center > Account: general settings and logo. */
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { z } from "zod";
 import type { Actor } from "../../lib/actor";
 import { assertCan } from "../../lib/permissions";
 import { db } from "../../db/client";
 import { accounts } from "../../db/schema/core";
-import { removeImage, saveImage } from "../../modules/admin/lib/images";
+import { readImage, removeImage, saveImage } from "../../modules/admin/lib/images";
 import { accountRow, getSettings, patchSettings } from "./account-settings";
 import { recordAudit } from "./audit";
 import { parse } from "./_shared";
@@ -48,4 +48,21 @@ export function setLogo(actor: Actor, data: Buffer | null): AccountInfo {
   patchSettings(actor.accountId, (s) => { s.general.logoUrl = data ? `/api/v1/account/logo?v=${Date.now()}` : null; });
   recordAudit(actor, data ? "account.logo_changed" : "account.logo_removed", {});
   return get(actor);
+}
+
+/**
+ * Public branding (no actor): name + logo of the install's account, for page metadata
+ * (<title>, Open Graph) and the public logo route. One account per install: the oldest one.
+ */
+export function publicBranding(): { accountId: string; name: string; hasLogo: boolean; logoVersion: string | null } | null {
+  const a = db.select({ id: accounts.id, name: accounts.name }).from(accounts).orderBy(asc(accounts.createdAt)).limit(1).get();
+  if (!a) return null;
+  const logoUrl = getSettings(a.id).general.logoUrl;
+  return { accountId: a.id, name: a.name, hasLogo: !!logoUrl, logoVersion: logoUrl ? new URL(logoUrl, "http://x").searchParams.get("v") : null };
+}
+
+/** The public logo image (Open Graph / favicon), or null when no logo is set. */
+export function publicLogo(): { data: Buffer; mime: string } | null {
+  const b = publicBranding();
+  return b?.hasLogo ? readImage("logo", b.accountId) : null;
 }
