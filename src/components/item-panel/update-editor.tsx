@@ -50,12 +50,16 @@ export function UpdateEditor({ users, teams = [], placeholder, onSubmit, compact
     editorProps: {
       attributes: { "data-testid": `${testPrefix}-editor`, class: styles.editorContent, "aria-label": placeholder ?? t("panel.writeUpdate") },
       handlePaste: (_v, e) => {
-        // Word, Excel and browsers put a preview image next to the text: when there is text, paste the text
-        if (e.clipboardData?.types.some((ty) => ty === "text/html" || ty === "text/plain")) return false;
-        const imgs = filesFrom(e.clipboardData?.files).filter((f) => f.type.startsWith("image/"));
+        const cd = e.clipboardData;
+        const imgs = filesFrom(cd?.files).filter((f) => f.type.startsWith("image/"));
+        const hasText = !!cd?.types.some((ty) => ty === "text/html" || ty === "text/plain");
+        // Word and Excel put a preview image next to plain text: ignore that image and paste the text.
+        // Teams and browsers put a real <img> in the html: attach the image and paste the text too.
+        const htmlHasImg = /<img\b/i.test(cd?.getData("text/html") ?? "");
         if (!imgs.length) return false;
+        if (hasText && !htmlHasImg) return false;
         addFilesRef.current(imgs);
-        return true;
+        return !hasText;
       },
     },
     onUpdate: ({ editor: ed }) => setEmpty(ed.isEmpty),
