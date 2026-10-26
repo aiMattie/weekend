@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ViewRenderer } from "@/components/views/registry";
 import { ItemPanel } from "@/components/item-panel/item-panel";
 import { useT } from "@/lib/i18n/client";
+import { valuesFromFilters } from "@/lib/view-state";
 import type { BoardFull } from "@/lib/board-types";
 import { BoardHeader } from "./board-header";
 import { Toolbar } from "./toolbar";
@@ -61,7 +62,7 @@ export function BoardPage({ initial, pulseItemId }: { initial: BoardFull; pulseI
   const newItem = async () => {
     const group = data.groups[0];
     if (!group) return;
-    const item = await actions.createItem({ groupId: group.id, name: t("toolbar.newItem"), top: true });
+    const item = await actions.createItem({ groupId: group.id, name: t("toolbar.newItem"), top: true, values: valuesFromFilters(data.columns, viewState.filters) });
     if (item) setEditItemId(item.id);
   };
 

@@ -103,6 +103,22 @@ export function matchesFilters(item: ItemDto, columns: ColumnDto[], rules: Filte
   return chains.some((ch) => ch.every(Boolean));
 }
 
+/**
+ * Values a new item needs so it stays visible under the view's filters: for each status/dropdown column
+ * with an "any of" rule in a pure AND chain, the first chosen option. Anything else is left empty.
+ */
+export function valuesFromFilters(columns: ColumnDto[], rules: FilterRule[]): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  if (rules.some((r) => r.join === "or")) return out;
+  for (const r of rules) {
+    if (r.op !== "any_of" || !Array.isArray(r.operand) || !r.operand.length || r.columnId in out) continue;
+    const col = columns.find((c) => c.id === r.columnId);
+    if (col?.type === "status") out[col.id] = { index: Number(r.operand[0]) };
+    else if (col?.type === "dropdown") out[col.id] = { ids: [Number(r.operand[0])] };
+  }
+  return out;
+}
+
 export function itemMatches(item: ItemDto, columns: ColumnDto[], state: ViewState, ctx: FormatContext, subitems: ItemDto[] = []): boolean {
   if (state.search.trim()) {
     const q = state.search.trim().toLowerCase();

@@ -50,6 +50,8 @@ export function UpdateEditor({ users, teams = [], placeholder, onSubmit, compact
     editorProps: {
       attributes: { "data-testid": `${testPrefix}-editor`, class: styles.editorContent, "aria-label": placeholder ?? t("panel.writeUpdate") },
       handlePaste: (_v, e) => {
+        // Word, Excel and browsers put a preview image next to the text: when there is text, paste the text
+        if (e.clipboardData?.types.some((ty) => ty === "text/html" || ty === "text/plain")) return false;
         const imgs = filesFrom(e.clipboardData?.files).filter((f) => f.type.startsWith("image/"));
         if (!imgs.length) return false;
         addFilesRef.current(imgs);
