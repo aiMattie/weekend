@@ -16,12 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
   let brand: ReturnType<typeof account.publicBranding> = null;
   try { brand = account.publicBranding(); } catch { /* no DB yet (build, first run) */ }
   const name = brand?.name || "Weekend";
+  const pageTitle = name === "Weekend" ? name : `${name} - Weekend`;
   const description = `Work OS voor ${name}`;
   const logo = brand?.hasLogo ? `/api/public/logo?v=${brand.logoVersion ?? ""}` : null;
   const images = logo ? [{ url: logo, alt: name }] : undefined;
   return {
     metadataBase: new URL(process.env.APP_URL || "http://localhost:3058"),
-    title: { default: name, template: `%s · ${name}` },
+    title: { default: pageTitle, template: `%s · ${pageTitle}` },
     description,
     applicationName: name,
     openGraph: { type: "website", siteName: name, title: name, description, images },

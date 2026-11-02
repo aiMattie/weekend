@@ -31,8 +31,8 @@ export function itemActions(core: Core): Pick<BoardActions, "createItem" | "rena
     d.items.filter((i) => i.id !== it.id && (it.parentItemId ? i.parentItemId === it.parentItemId : !i.parentItemId && i.groupId === groupId)).sort((a, b) => a.position - b.position);
 
   const self: ReturnType<typeof itemActions> = {
-    async createItem({ groupId, name, afterId, top, parentItemId }) {
-      const res = await run(null, () => api.post<ItemRowResponse>("/api/v1/items", { boardId, groupId, name, afterId, top, parentItemId }), (r, d) => ({
+    async createItem({ groupId, name, afterId, top, parentItemId, values }) {
+      const res = await run(null, () => api.post<ItemRowResponse>("/api/v1/items", { boardId, groupId, name, afterId, top, parentItemId, values }), (r, d) => ({
         ...d,
         items: d.items.some((i) => i.id === r.id) ? d.items : [...d.items, toItemDto(r)].map((i) => (parentItemId && i.id === parentItemId ? { ...i, subitemCount: i.subitemCount + 1 } : i)),
       }));

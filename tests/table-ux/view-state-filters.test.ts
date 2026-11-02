@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ColumnDto, GroupDto, ItemDto, UserLite } from "../../src/lib/board-types";
-import { buildRenderGroups, emptyViewState, matchesFilters, NAME_COLUMN_SORT, sameSavedPart, savedPart, stateFromView, type FilterRule } from "../../src/lib/view-state";
+import { buildRenderGroups, emptyViewState, matchesFilters, NAME_COLUMN_SORT, sameSavedPart, savedPart, stateFromView, valuesFromFilters, type FilterRule } from "../../src/lib/view-state";
 import { DEFAULT_STATUS_LABELS } from "../../src/server/columns/status";
 
 const col = (id: string, key: string, type: string, settings: Record<string, unknown> = {}): ColumnDto =>
@@ -154,5 +154,19 @@ describe("incomplete rules", () => {
     expect(names([{ columnId: "c5", op: "contains", operand: "" }])).toHaveLength(4);
     expect(names([{ columnId: NAME_COLUMN_SORT, op: "contains" }])).toHaveLength(4);
     expect(names([{ columnId: "c5", op: "is_empty" }])).toHaveLength(2);
+  });
+});
+
+describe("valuesFromFilters", () => {
+  it("prefills status and dropdown from any_of rules so a new item stays visible", () => {
+    const rules: FilterRule[] = [{ columnId: "c1", op: "any_of", operand: [2, 0] }, { columnId: "c7", op: "any_of", operand: [1] }];
+    const values = valuesFromFilters(columns, rules);
+    expect(values).toEqual({ c1: { index: 2 }, c7: { ids: [1] } });
+    const created = item("9", "New", values);
+    expect(matchesFilters(created, columns, rules)).toBe(true);
+  });
+  it("leaves values empty for or-chains, other ops and other column types", () => {
+    expect(valuesFromFilters(columns, [{ columnId: "c1", op: "any_of", operand: [1] }, { columnId: "c7", op: "any_of", operand: [1], join: "or" }])).toEqual({});
+    expect(valuesFromFilters(columns, [{ columnId: "c1", op: "none_of", operand: [1] }, { columnId: "c5", op: "contains", operand: "x" }])).toEqual({});
   });
 });

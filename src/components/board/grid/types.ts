@@ -11,7 +11,7 @@ export type ConvertTarget = { to: "subitem"; parentItemId: string } | { to: "ite
 
 export interface BoardActions {
   refetch: () => Promise<void>;
-  createItem: (o: { groupId: string; name: string; afterId?: string; top?: boolean; parentItemId?: string }) => Promise<ItemDto | null>;
+  createItem: (o: { groupId: string; name: string; afterId?: string; top?: boolean; parentItemId?: string; values?: Record<string, unknown> }) => Promise<ItemDto | null>;
   renameItem: (itemId: string, name: string) => Promise<void>;
   setValue: (itemId: string, columnId: string, input: unknown) => Promise<void>;
   deleteItem: (itemId: string) => Promise<void>;

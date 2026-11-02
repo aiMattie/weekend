@@ -5,13 +5,15 @@
 import { useDroppable } from "@dnd-kit/core";
 import { useState } from "react";
 import { useT } from "@/lib/i18n/client";
+import { valuesFromFilters } from "@/lib/view-state";
 import { CHAT_WIDTH, gridTemplate, useTable } from "./table-context";
 import styles from "./table.module.css";
 
 /** "+ Add item" row. Enter creates the item and keeps the input focused for the next one. Also the drop zone at the end of a group. */
 export function AddItemRow({ groupId, color }: { groupId: string; color: string }) {
   const t = useT();
-  const { actions, columns, nameWidth, leftWidth, widthOf, pinned, dropTarget, dragEnabled } = useTable();
+  const { actions, columns, board, viewState, nameWidth, leftWidth, widthOf, pinned, dropTarget, dragEnabled } = useTable();
+  const allColumns = board.columns;
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
   const drop = useDroppable({ id: `gtail:${groupId}`, data: { type: "gtail", groupId }, disabled: !dragEnabled });
@@ -21,7 +23,7 @@ export function AddItemRow({ groupId, color }: { groupId: string; color: string 
     const name = draft.trim();
     if (!name) return;
     setDraft("");
-    await actions.createItem({ groupId, name });
+    await actions.createItem({ groupId, name, values: valuesFromFilters(allColumns, viewState.filters) });
   };
 
   return (
