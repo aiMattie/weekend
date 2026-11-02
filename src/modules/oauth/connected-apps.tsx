@@ -18,8 +18,11 @@ function CopyButton({ text }: { text: string }) {
   return <Button size="xs" kind="tertiary" data-testid="claude-copy-url" onClick={() => { void navigator.clipboard?.writeText(text); setDone(true); setTimeout(() => setDone(false), 1500); }}>{done ? t("oauth.connect.copied") : t("oauth.connect.copy")}</Button>;
 }
 
+/** What this environment offers: claude.ai's custom connectors (allowed redirect host) and the Claude Desktop extension (proxy built). */
+export interface ClaudeConnectOptions { connector: boolean; desktop: boolean }
+
 /** Step-by-step manual: connect Claude (claude.ai, Desktop, mobile, Claude Code) to this environment over OAuth. */
-export function ClaudeConnectCard({ baseUrl }: { baseUrl: string }) {
+export function ClaudeConnectCard({ baseUrl, options }: { baseUrl: string; options: ClaudeConnectOptions }) {
   const t = useT();
   const url = `${baseUrl}/api/mcp`;
   return (
@@ -28,14 +31,27 @@ export function ClaudeConnectCard({ baseUrl }: { baseUrl: string }) {
       <div className={local.endpointRow}>
         <span>{t("oauth.connect.url")}</span><code className={styles.mono} data-testid="claude-mcp-url">{url}</code><CopyButton text={url} />
       </div>
-      <h3 style={{ margin: "16px 0 6px", fontSize: 14 }}>{t("oauth.connect.webTitle")}</h3>
-      <ol className={local.steps}>
-        <li>{t("oauth.connect.web1")}</li>
-        <li>{t("oauth.connect.web2")}</li>
-        <li>{t("oauth.connect.web3")}</li>
-        <li>{t("oauth.connect.web4")}</li>
-        <li>{t("oauth.connect.web5")}</li>
-      </ol>
+      {options.connector && <>
+        <h3 style={{ margin: "16px 0 6px", fontSize: 14 }}>{t("oauth.connect.webTitle")}</h3>
+        <p className={styles.hint}>{t("oauth.connect.webNote")}</p>
+        <ol className={local.steps} data-testid="claude-connector-steps">
+          <li>{t("oauth.connect.web1")}</li>
+          <li>{t("oauth.connect.web2")}</li>
+          <li>{t("oauth.connect.web3")}</li>
+          <li>{t("oauth.connect.web4")}</li>
+          <li>{t("oauth.connect.web5")}</li>
+        </ol>
+      </>}
+      {options.desktop && <>
+        <h3 style={{ margin: "16px 0 6px", fontSize: 14 }}>{t("oauth.connect.desktopTitle")}</h3>
+        <p className={styles.hint}>{t("oauth.connect.desktopNote")}</p>
+        <ol className={local.steps} data-testid="claude-desktop-steps">
+          <li>{t("oauth.connect.desktop1")} <a href="/api/v1/claude-desktop" download data-testid="claude-desktop-download"><Button size="xs" kind="secondary">{t("oauth.connect.desktopDownload")}</Button></a></li>
+          <li>{t("oauth.connect.desktop2")}</li>
+          <li>{t("oauth.connect.desktop3")}</li>
+          <li>{t("oauth.connect.desktop4")}</li>
+        </ol>
+      </>}
       <h3 style={{ margin: "16px 0 6px", fontSize: 14 }}>{t("oauth.connect.codeTitle")}</h3>
       <ol className={local.steps}>
         <li>{t("oauth.connect.code1")}</li>
@@ -81,6 +97,6 @@ export function ConnectedAppsCard({ apps: initial, workspaces }: { apps: Connect
 }
 
 /** Admin > API > MCP tab: manual + connected apps. */
-export function ConnectedApps({ baseUrl, apps, workspaces }: { baseUrl: string; apps: ConnectedAppDto[]; workspaces: { id: string; name: string }[] }) {
-  return <><ClaudeConnectCard baseUrl={baseUrl} /><ConnectedAppsCard apps={apps} workspaces={workspaces} /></>;
+export function ConnectedApps({ baseUrl, options, apps, workspaces }: { baseUrl: string; options: ClaudeConnectOptions; apps: ConnectedAppDto[]; workspaces: { id: string; name: string }[] }) {
+  return <><ClaudeConnectCard baseUrl={baseUrl} options={options} /><ConnectedAppsCard apps={apps} workspaces={workspaces} /></>;
 }

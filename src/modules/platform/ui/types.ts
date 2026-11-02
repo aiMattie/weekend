@@ -15,4 +15,6 @@ export interface PlatformProps {
   firstBoardId: string | null;
   /** oauth module: the user's connected apps (MCP tab) */
   connectedApps: import("@/modules/oauth/connected-apps").ConnectedAppDto[];
+  /** oauth module: which ways to connect Claude the MCP tab shows */
+  claudeConnect: import("@/modules/oauth/connected-apps").ClaudeConnectOptions;
 }

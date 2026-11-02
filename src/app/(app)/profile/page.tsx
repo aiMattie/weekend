@@ -1,5 +1,6 @@
 import { requireUser, userToActor, getCurrentSessionId } from "@/lib/auth";
 import { ProfilePage } from "@/modules/admin/ui/profile-page";
+import { claudeConnectOptions } from "@/server/mcp/desktop-extension";
 import { profile, sessions, security, workspaces } from "@/server/services";
 import { issuer, listGrants } from "@/server/services/oauth";
 import { passwordViolations } from "@/server/services/security";
@@ -24,7 +25,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ s
       googleFlash={sp.google === "linked" || isSsoErrorCode(sp.google) ? sp.google : null}
       microsoft={profileView(actor, "microsoft")}
       microsoftFlash={sp.microsoft === "linked" || isSsoErrorCode(sp.microsoft) ? sp.microsoft : null}
-      claude={JSON.parse(JSON.stringify({ baseUrl: issuer(), apps: listGrants(actor), workspaces: workspaces.list(actor).map((w) => ({ id: w.id, name: w.name })) }))}
+      claude={JSON.parse(JSON.stringify({ baseUrl: issuer(), options: claudeConnectOptions(), apps: listGrants(actor), workspaces: workspaces.list(actor).map((w) => ({ id: w.id, name: w.name })) }))}
     />
   );
 }

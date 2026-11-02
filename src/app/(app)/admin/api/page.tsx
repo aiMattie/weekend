@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { requireUser, userToActor } from "@/lib/auth";
 import { ApiPage } from "@/modules/platform/ui/api-page";
+import { claudeConnectOptions } from "@/server/mcp/desktop-extension";
 import { isReadOnlyTool } from "@/server/mcp/util";
 import { listMcpTools } from "@/server/mcp/tools/registry";
 import { limits } from "@/server/platform/rate-limit";
@@ -30,6 +31,7 @@ export default async function Page() {
     defaultBudget: limits().daily,
     firstBoardId: bs[0]?.id ?? null,
     connectedApps: listGrants(actor),
+    claudeConnect: claudeConnectOptions(),
   };
   return <ApiPage {...JSON.parse(JSON.stringify(props))} />;
 }
