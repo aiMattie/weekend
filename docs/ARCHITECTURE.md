@@ -315,10 +315,11 @@ Eigenaar: `oauth`. Laat claude.ai (web, Desktop, mobiel) en Claude Code verbinde
 | Discovery | `/.well-known/oauth-authorization-server`, `/.well-known/oauth-protected-resource[/api/mcp]`; de 401 van `/api/mcp` wijst ernaar via `WWW-Authenticate: resource_metadata=` |
 | Endpoints | `POST /api/oauth/register` (rate limit per IP), `POST /api/oauth/token`, `POST /api/oauth/revoke`, consentpagina `/oauth/authorize` + `POST /api/oauth/authorize` (sessie + Origin-check) |
 | Bearer | `src/server/oauth/token-resolver.ts` (geregistreerd in `bearer-resolvers.ts`). Access tokens (`mno_at_`, 1 uur) geven een Actor met `actor.token = { id: grantId, scopes, workspaceIds }`, dus scopes, workspace-beperking, rate limits en audit werken als bij API-tokens |
-| UI | Beheer > API > tabblad MCP: connector-instructies + Gekoppelde apps (`src/modules/oauth/connected-apps.tsx`, `GET/DELETE /api/v1/oauth-grants`) |
-| Env | Issuer = `PUBLIC_URL`, anders `APP_URL`. `OAUTH_REDIRECT_HOSTS` (standaard `claude.ai,claude.com`; loopback altijd toegestaan), `OAUTH_REGISTER_PER_HOUR` |
+| UI | Beheer > API > tabblad MCP en Mijn profiel: instructies + Gekoppelde apps (`src/modules/oauth/connected-apps.tsx`, `GET/DELETE /api/v1/oauth-grants`). De stappen voor de connector van claude.ai staan er alleen als claude.ai een toegestane redirect-host is (`claudeConnectorsAllowed`), die voor de extensie alleen als de proxy gebouwd is |
+| Claude Desktop-extensie | Voor een omgeving die claude.ai niet bereikt (VPN, `localhost`). Stdio-naar-HTTP-proxy `src/desktop-extension/proxy.ts`: draait op de computer van de gebruiker, stuurt elk MCP-bericht door naar `/api/mcp` en logt in via de browser (DCR, PKCE, redirect naar `127.0.0.1`), tokens in `~/.weekend/oauth.json`, één aanmelding of refresh tegelijk over processen heen (lockbestand). `npm run build:desktop` (onderdeel van `npm run build`) bundelt hem met esbuild naar `dist/desktop-extension/server/index.mjs`; `src/server/mcp/desktop-extension.ts` pakt hem met een manifest (adres = `mcpResource()`, geen token) in tot `weekend.mcpb`, te downloaden via `GET /api/v1/claude-desktop` |
+| Env | Issuer = `PUBLIC_URL`, anders `APP_URL`. `OAUTH_REDIRECT_HOSTS` (standaard `claude.ai,claude.com`; leeg = alleen loopback; loopback altijd toegestaan), `OAUTH_REGISTER_PER_HOUR`, `DESKTOP_PROXY_FILE` (pad van de gebouwde proxy, standaard `dist/desktop-extension/server/index.mjs`) |
 
-Tests: `tests/oauth/oauth.test.ts`.
+Tests: `tests/oauth/oauth.test.ts`, `tests/oauth/desktop-extension.test.ts` (manifest, zip, download, en de gebouwde proxy tegen de echte MCP- en OAuth-routes).
 
 ## 13. Wispr Flow-meetings (module wispr)
 

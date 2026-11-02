@@ -11,9 +11,9 @@ import { Card, Chip, Field, PageHead, Person, fmtDate, useAction } from "./ui";
 import { ProfileGoogleCard } from "@/modules/sso/ui/profile-google";
 import type { ProfileGoogle } from "@/server/services/sso-settings";
 import styles from "./admin.module.css";
-import { ClaudeConnectCard, ConnectedAppsCard, type ConnectedAppDto } from "@/modules/oauth/connected-apps";
+import { ClaudeConnectCard, ConnectedAppsCard, type ClaudeConnectOptions, type ConnectedAppDto } from "@/modules/oauth/connected-apps";
 
-export function ProfilePage({ profile, sessions, autoSetup2fa, policyHint, google, googleFlash = null, microsoft, microsoftFlash = null, claude }: { profile: Profile; sessions: SessionInfo[]; autoSetup2fa: boolean; policyHint: string; google?: ProfileGoogle; googleFlash?: string | null; microsoft?: ProfileGoogle; microsoftFlash?: string | null; claude?: { baseUrl: string; apps: ConnectedAppDto[]; workspaces: { id: string; name: string }[] } }) {
+export function ProfilePage({ profile, sessions, autoSetup2fa, policyHint, google, googleFlash = null, microsoft, microsoftFlash = null, claude }: { profile: Profile; sessions: SessionInfo[]; autoSetup2fa: boolean; policyHint: string; google?: ProfileGoogle; googleFlash?: string | null; microsoft?: ProfileGoogle; microsoftFlash?: string | null; claude?: { baseUrl: string; options: ClaudeConnectOptions; apps: ConnectedAppDto[]; workspaces: { id: string; name: string }[] } }) {
   return (
     <div style={{ padding: "28px 40px 80px", overflow: "auto", flex: 1 }} data-testid="profile-page">
       <div className={styles.page}>
@@ -23,7 +23,7 @@ export function ProfilePage({ profile, sessions, autoSetup2fa, policyHint, googl
         {google && <ProfileGoogleCard google={google} flash={googleFlash} />}
         {microsoft && <ProfileGoogleCard provider="microsoft" google={microsoft} flash={microsoftFlash} />}
         <Sessions sessions={sessions} />
-        {claude && <div id="claude"><ClaudeConnectCard baseUrl={claude.baseUrl} /><ConnectedAppsCard apps={claude.apps} workspaces={claude.workspaces} /></div>}
+        {claude && <div id="claude"><ClaudeConnectCard baseUrl={claude.baseUrl} options={claude.options} /><ConnectedAppsCard apps={claude.apps} workspaces={claude.workspaces} /></div>}
       </div>
     </div>
   );

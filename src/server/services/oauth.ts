@@ -90,6 +90,9 @@ export function isAllowedRedirectUri(uri: string): boolean {
   return hosts.some((h) => u.hostname === h || u.hostname.endsWith("." + h));
 }
 
+/** claude.ai's custom connectors may sign in: its callback is an allowed redirect URI. */
+export const claudeConnectorsAllowed = (): boolean => isAllowedRedirectUri("https://claude.ai/api/mcp/auth_callback");
+
 /** Exact match, except that loopback redirects may use any port (RFC 8252 §7.3). */
 function redirectMatches(registered: string, given: string): boolean {
   if (registered === given) return true;
