@@ -54,6 +54,7 @@ export const nl = {
   "shell.workspaces": "Workspaces",
   "shell.addBoard": "Board toevoegen",
   "shell.addFolder": "Folder toevoegen",
+  "shell.addDoc": "Doc toevoegen",
   "shell.addWorkspace": "Workspace toevoegen",
   "shell.newBoardName": "Nieuw board",
   "shell.newFolderName": "Nieuwe folder",

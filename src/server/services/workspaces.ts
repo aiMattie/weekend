@@ -1,7 +1,10 @@
 import { and, asc, eq, inArray } from "drizzle-orm";
+import { existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import { z } from "zod";
 import type { Actor } from "../../lib/actor";
-import { ForbiddenError, NotFoundError } from "../../lib/errors";
+import { ForbiddenError, NotFoundError, ValidationError } from "../../lib/errors";
+import { newId } from "../../lib/id";
 import { assertCan, can, workspaceVisibilityFilter } from "../../lib/permissions";
 import { idSchema, nameSchema } from "../../lib/zod-schemas";
 import { db } from "../../db/client";
@@ -17,6 +20,8 @@ const createSchema = z.object({
   kind: z.enum(["open", "closed"]).default("open"),
   color: z.string().max(20).nullish(),
   icon: z.string().max(60).nullish(),
+  /** Groups workspaces in the switcher. Blank -> null (no category). */
+  category: z.string().trim().max(60).nullish().transform((v) => (v ? v : null)),
 });
 const updateSchema = createSchema.partial();
 
@@ -60,6 +65,62 @@ export function update(actor: Actor, id: string, input: unknown): Workspace {
 }
 
 /** Soft delete (state = deleted); boards inside stay in the DB but become unreachable. */
+/* ------------------------------------------------------------ logo */
+
+/** Logos are shown inline everywhere, so only raster images (no SVG: it can carry script). */
+export const LOGO_TYPES: Record<string, string> = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp", "image/gif": "gif" };
+export const MAX_LOGO_BYTES = 1024 * 1024;
+const logosDir = () => path.join(process.env.FILES_DIR ?? path.join(process.cwd(), "data", "files"), "workspace-logos");
+const logoPath = (file: string) => path.join(logosDir(), path.basename(file));
+
+/** Magic-number check, so a renamed non-image is refused even when the browser sends an image type. */
+function sniffImage(b: Uint8Array): string | null {
+  const at = (i: number, ...xs: number[]) => xs.every((x, j) => b[i + j] === x);
+  if (at(0, 0x89, 0x50, 0x4e, 0x47)) return "image/png";
+  if (at(0, 0xff, 0xd8, 0xff)) return "image/jpeg";
+  if (at(0, 0x47, 0x49, 0x46, 0x38)) return "image/gif";
+  if (at(0, 0x52, 0x49, 0x46, 0x46) && at(8, 0x57, 0x45, 0x42, 0x50)) return "image/webp";
+  return null;
+}
+
+/** URL of the workspace logo for <img src>; changes with every upload (cache busting). */
+export const logoUrl = (ws: { id: string; logo: string | null }): string | null =>
+  ws.logo ? `/api/v1/workspaces/${ws.id}/logo?v=${encodeURIComponent(ws.logo)}` : null;
+
+export function setLogo(actor: Actor, id: string, bytes: Uint8Array): Workspace {
+  const cur = get(actor, id);
+  assertCan(actor, "workspace:update", { workspaceId: id });
+  if (bytes.byteLength === 0) throw new ValidationError("The file is empty");
+  if (bytes.byteLength > MAX_LOGO_BYTES) throw new ValidationError("Logo is too large (max 1 MB)");
+  const mime = sniffImage(bytes);
+  if (!mime) throw new ValidationError("Logo must be a PNG, JPG, WebP or GIF image");
+  const file = `${id}-${newId()}.${LOGO_TYPES[mime]}`;
+  mkdirSync(logosDir(), { recursive: true });
+  writeFileSync(logoPath(file), bytes);
+  const ws = db.update(workspaces).set({ logo: file }).where(eq(workspaces.id, id)).returning().get();
+  if (cur.logo) rmSync(logoPath(cur.logo), { force: true });
+  wsEvent(actor);
+  return ws;
+}
+
+export function removeLogo(actor: Actor, id: string): Workspace {
+  const cur = get(actor, id);
+  assertCan(actor, "workspace:update", { workspaceId: id });
+  const ws = db.update(workspaces).set({ logo: null }).where(eq(workspaces.id, id)).returning().get();
+  if (cur.logo) rmSync(logoPath(cur.logo), { force: true });
+  wsEvent(actor);
+  return ws;
+}
+
+/** The logo file of a workspace the actor may see. */
+export function readLogo(actor: Actor, id: string): { absPath: string; mimeType: string } {
+  const ws = get(actor, id);
+  if (!ws.logo || !existsSync(logoPath(ws.logo))) throw new NotFoundError("Logo");
+  const ext = path.extname(ws.logo).slice(1);
+  const mimeType = Object.entries(LOGO_TYPES).find(([, e]) => e === ext)?.[0] ?? "application/octet-stream";
+  return { absPath: logoPath(ws.logo), mimeType };
+}
+
 export function remove(actor: Actor, id: string): void {
   get(actor, id);
   assertCan(actor, "workspace:delete", { workspaceId: id });

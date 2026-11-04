@@ -12,7 +12,7 @@ import { ForbiddenError, NotFoundError, ValidationError } from "../../lib/errors
 import { can } from "../../lib/permissions";
 import { idSchema } from "../../lib/zod-schemas";
 import { db } from "../../db/client";
-import { boards, items, users, workspaces } from "../../db/schema/core";
+import { boards, folders, items, users, workspaces } from "../../db/schema/core";
 import { docComments, docMembers, docs, docVersions, type DocJson } from "../../db/schema/docs";
 import { docToMarkdown, docToText, ensureBlockIds, extractMentions, markdownToDoc } from "../../modules/boards-extra/docs/serialize";
 import { emptyDoc, type PMDoc } from "../../modules/boards-extra/docs/types";
@@ -33,6 +33,8 @@ const visibilitySchema = z.enum(["main", "private"]);
 
 const createInput = z.object({
   workspaceId: idSchema.optional(),
+  /** folder in the workspace tree (workspace docs only) */
+  folderId: idSchema.nullish(),
   itemId: idSchema.optional(),
   columnId: z.string().max(64).optional(),
   title: z.string().trim().max(255).optional(),
@@ -51,6 +53,8 @@ const updateInput = z.object({
   cover: z.string().max(2_000_000).nullish(),
   icon: z.string().max(16).nullish(),
   visibility: visibilitySchema.optional(),
+  /** move within the workspace tree; null = workspace root */
+  folderId: idSchema.nullish(),
 });
 
 const listInput = z.object({ workspaceId: idSchema.optional(), itemId: idSchema.optional(), limit: z.number().int().min(1).max(500).default(200) });
@@ -136,7 +140,7 @@ export function list(actor: Actor, query: unknown = {}): DocSummary[] {
     if (!can(actor, "workspace:view", { workspaceId: q.workspaceId })) throw new ForbiddenError();
   }
   const rows = db.select({
-    id: docs.id, workspaceId: docs.workspaceId, itemId: docs.itemId, boardId: docs.boardId, columnId: docs.columnId, title: docs.title,
+    id: docs.id, workspaceId: docs.workspaceId, itemId: docs.itemId, boardId: docs.boardId, columnId: docs.columnId, folderId: docs.folderId, title: docs.title,
     cover: docs.cover, icon: docs.icon, visibility: docs.visibility, state: docs.state, ownerId: docs.ownerId, position: docs.position,
     createdAt: docs.createdAt, updatedAt: docs.updatedAt, blocks: docs.blocks,
   }).from(docs)
@@ -196,6 +200,15 @@ export function toMarkdown(actor: Actor, docId: string): string {
 
 /* ------------------------------------------------------------ mutations */
 
+/** A folder id that must belong to the doc's workspace (null/undefined pass through). */
+function checkFolder(workspaceId: string, folderId: string | null | undefined): string | null {
+  if (!folderId) return null;
+  const f = db.select({ workspaceId: folders.workspaceId }).from(folders).where(eq(folders.id, folderId)).get();
+  if (!f) throw new NotFoundError("Folder");
+  if (f.workspaceId !== workspaceId) throw new ValidationError("The folder is in another workspace");
+  return folderId;
+}
+
 export function create(actor: Actor, input: unknown): DocDto {
   const d = parse(createInput, input);
   let workspaceId = d.workspaceId;
@@ -214,9 +227,11 @@ export function create(actor: Actor, input: unknown): DocDto {
     if (!ws) throw new NotFoundError("Workspace");
     if (!can(actor, "workspace:create_board", { workspaceId })) throw new ForbiddenError();
   }
+  if (d.folderId && d.itemId) throw new ValidationError("Item docs cannot be in a folder");
+  const folderId = checkFolder(workspaceId!, d.folderId);
   const blocks = ensureBlockIds(resolveInitialBlocks(d)) as DocJson;
   const row = db.insert(docs).values({
-    workspaceId: workspaceId!, itemId: d.itemId ?? null, boardId, columnId: d.columnId ?? null, title, blocks,
+    workspaceId: workspaceId!, itemId: d.itemId ?? null, boardId, columnId: d.columnId ?? null, folderId, title, blocks,
     cover: d.cover ?? null, icon: d.icon ?? null, visibility: d.visibility ?? "main", ownerId: actor.isSystem ? null : actor.id,
   }).returning().get();
   notifyMentions(actor, row, null, blocks as PMDoc);
@@ -242,6 +257,10 @@ export function update(actor: Actor, docId: string, input: unknown): DocDto {
   if (p.cover !== undefined) set.cover = p.cover;
   if (p.icon !== undefined) set.icon = p.icon;
   if (p.visibility !== undefined) set.visibility = p.visibility;
+  if (p.folderId !== undefined) {
+    if (cur.itemId && p.folderId) throw new ValidationError("Item docs cannot be in a folder");
+    set.folderId = checkFolder(cur.workspaceId, p.folderId);
+  }
   let next: PMDoc | null = null;
   if (p.blocks) next = p.blocks as PMDoc;
   else if (p.markdown !== undefined) next = markdownToDoc(p.markdown);

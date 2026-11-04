@@ -1,7 +1,7 @@
 "use client";
 
 import { Search as SearchField } from "@vibe/core";
-import { Add, Archive, Board, ClassicFolder, Delete, DropdownChevronDown, DropdownChevronRight, Edit, Favorite, Menu as DotsIcon, NavigationDoubleChevronLeft, Search, Workspace } from "@vibe/icons";
+import { Add, Archive, Board, ClassicFolder, Delete, Doc, DropdownChevronDown, DropdownChevronRight, Edit, Favorite, Menu as DotsIcon, NavigationDoubleChevronLeft, Search, Workspace } from "@vibe/icons";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -9,6 +9,7 @@ import { ActionMenu, type MenuEntry } from "@/components/board/ui/menu";
 import type { NavData } from "@/lib/board-types";
 import { useT } from "@/lib/i18n/client";
 import { usePersistentState } from "@/lib/use-persistent-state";
+import { groupWorkspaces } from "@/lib/workspace-groups";
 import { isNavActive, navFor } from "./nav-registry";
 import styles from "./sidebar.module.css";
 import { useSidebarActions } from "./sidebar-actions";
@@ -28,6 +29,13 @@ function currentWorkspaceFromPath(pathname: string, nav: NavData): string | null
 }
 
 const letter = (name: string) => name.replace(/[^\p{L}\p{N}]/gu, "").charAt(0).toUpperCase();
+/** Workspace thumbnail: first letter on the workspace colour (sidebar button and switcher). */
+const WsBadge = ({ name, color, logoUrl }: { name: string; color: string | null; logoUrl?: string | null }) => (
+  logoUrl
+    // eslint-disable-next-line @next/next/no-img-element -- small authenticated API image, next/image adds nothing here
+    ? <img src={logoUrl} alt="" className={`${styles.wsBadge} ${styles.wsLogo}`} aria-hidden />
+    : <span className={styles.wsBadge} style={{ background: color ?? "#0073ea" }} aria-hidden>{letter(name)}</span>
+);
 
 export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }) {
   const t = useT();
@@ -57,6 +65,14 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
   const select = (id: string) => setStored(id);
   const actions = useSidebarActions(select);
   const ws = nav.workspaces.find((w) => w.id === selectedId) ?? null;
+  // Workspaces grouped by category (alphabetical, uncategorised last); a flat list when nobody uses categories.
+  const wsGroups = groupWorkspaces(nav.workspaces);
+  const hasCategories = wsGroups.some((g) => g.category);
+  const workspaceMenu: MenuEntry[] = wsGroups.flatMap((g, i) => [
+    ...(i > 0 ? [{ key: `ws-divider-${i}`, divider: true }] : []),
+    ...(hasCategories ? [{ key: `ws-group-${i}`, title: g.category ?? t("chrome.wsCategoryNone") }] : []),
+    ...g.workspaces.map((w) => ({ key: w.id, label: w.name, icon: <WsBadge name={w.name} color={w.color} logoUrl={w.logoUrl} />, active: w.id === ws?.id, testId: `workspace-option-${w.name}`, onClick: () => select(w.id) })),
+  ]);
   const activeBoardId = /^\/boards\/(\d+)/.exec(pathname)?.[1] ?? null;
   const favorites = nav.favorites.map((id) => nav.boards.find((b) => b.id === id)).filter(Boolean) as NavData["boards"];
   const topItems = navFor("sidebar-top", user.role);
@@ -69,6 +85,7 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
   ] : [];
   const addMenuItems: MenuEntry[] = [
     { label: t("shell.addBoard"), icon: <Board size={16} />, disabled: !ws, testId: "add-board", onClick: () => ws && actions.newBoard(ws.id) },
+    { label: t("shell.addDoc"), icon: <Doc size={16} />, disabled: !ws, testId: "add-doc", onClick: () => ws && actions.newDoc(ws.id) },
     { label: t("shell.addFolder"), icon: <ClassicFolder size={16} />, disabled: !ws, testId: "add-folder", onClick: () => ws && actions.newFolder(ws.id) },
     { label: t("shell.addWorkspace"), icon: <Workspace size={16} />, testId: "add-workspace", onClick: () => actions.newWorkspace() },
   ];
@@ -84,7 +101,7 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
         <div className={styles.wsRow}>
           <div className={styles.wsSelect} data-testid="workspace-select">
             <button type="button" className={styles.wsButton} onClick={(e) => setWsEl(wsEl ? null : e.currentTarget)} aria-label={t("shell.workspaces")} aria-haspopup="menu" data-testid="workspace-select-button">
-              {ws && <span className={styles.wsBadge} style={{ background: ws.color ?? "#0073ea" }}>{letter(ws.name)}</span>}
+              {ws && <WsBadge name={ws.name} color={ws.color} logoUrl={ws.logoUrl} />}
               <span className={styles.wsName} data-testid="workspace-select-name">{ws?.name ?? t("shell.workspaces")}</span>
               <DropdownChevronDown size={18} />
             </button>
@@ -92,7 +109,7 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
               <ActionMenu
                 anchorEl={wsEl}
                 onClose={() => setWsEl(null)}
-                items={nav.workspaces.map((w) => ({ key: w.id, label: w.name, active: w.id === ws?.id, testId: `workspace-option-${w.name}`, onClick: () => select(w.id) }))}
+                items={workspaceMenu}
               />
             ) : null}
           </div>

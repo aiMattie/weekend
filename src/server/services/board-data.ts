@@ -12,6 +12,7 @@ import * as boards from "./boards";
 import { boardColumns, requireBoard } from "./_shared";
 import * as viewsService from "./views";
 import * as workspaces from "./workspaces";
+import * as docsService from "./docs";
 
 export function getBoardFull(actor: Actor, boardId: string): BoardFull {
   const board = requireBoard(actor, boardId, "board:view");
@@ -55,9 +56,12 @@ export function getNavData(actor: Actor): NavData {
   const fl = wsIds.length ? db.select().from(folders).where(inArray(folders.workspaceId, wsIds)).orderBy(asc(folders.position)).all() : [];
   const bs = boards.list(actor);
   return {
-    workspaces: ws.map((w) => ({ id: w.id, name: w.name, kind: w.kind, color: w.color, icon: w.icon })),
+    workspaces: ws.map((w) => ({ id: w.id, name: w.name, kind: w.kind, color: w.color, icon: w.icon, category: w.category, logoUrl: workspaces.logoUrl(w) })),
     folders: fl.map((f) => ({ id: f.id, workspaceId: f.workspaceId, parentFolderId: f.parentFolderId, name: f.name })),
     boards: bs.map((b) => ({ id: b.id, name: b.name, workspaceId: b.workspaceId, folderId: b.folderId, kind: b.kind })),
+    // workspace docs only (item docs live in their item); docs.list already drops docs the actor can't see
+    docs: docsService.list(actor, { limit: 500 }).filter((d) => !d.itemId).sort((a, b) => a.position - b.position || a.title.localeCompare(b.title, "nl"))
+      .map((d) => ({ id: d.id, title: d.title, workspaceId: d.workspaceId, folderId: d.folderId, icon: d.icon })),
     favorites: boards.listFavorites(actor).map((b) => b.id),
   };
 }

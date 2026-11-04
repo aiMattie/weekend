@@ -13,9 +13,9 @@ import frame from "./frame.module.css";
 import { isNavActive, navFor, type NavItem } from "./nav-registry";
 import { useCurrentUser } from "./user-context";
 
-/** rail: Workspace, Sidekick, Agents | Workflows, Notetaker | Favorites, More. Every other registered entry lives under "More". */
-const PRIMARY = ["home-rail", "sidekick-rail", "agents-rail"];
-const SECONDARY = ["workflows-rail", "notetaker-rail"];
+/** rail: Workspace, Sidekick, My work | Workflows | Favorites, More. Every other registered entry (Agents, Notetaker, ...) lives under "More". */
+const PRIMARY = ["home-rail", "sidekick-rail", "my-work-rail"];
+const SECONDARY = ["workflows-rail"];
 
 /** Narrow labelled rail (Workspace, ..., Favorites, More). Entries come from nav-registry (section "rail"). */
 export function Rail({ nav }: { nav: NavData }) {

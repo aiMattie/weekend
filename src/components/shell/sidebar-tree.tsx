@@ -1,10 +1,11 @@
 "use client";
 
 import { ActionMenu, type MenuEntry } from "@/components/board/ui/menu";
-import { Archive, Board, BoardPrivate, Delete, DropdownChevronDown, DropdownChevronRight, Duplicate, Edit, ClassicFolder, Favorite, Link as LinkIcon, Menu as DotsIcon, Open, Workspace } from "@vibe/icons";
+import { Archive, Board, BoardPrivate, Delete, Doc, DropdownChevronDown, DropdownChevronRight, Duplicate, Edit, ClassicFolder, Favorite, Link as LinkIcon, Menu as DotsIcon, Open, Workspace } from "@vibe/icons";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
-import type { NavBoard, NavData, NavFolder } from "@/lib/board-types";
+import type { NavBoard, NavData, NavDoc, NavFolder } from "@/lib/board-types";
 import { useT } from "@/lib/i18n/client";
 import styles from "./sidebar.module.css";
 import type { SidebarActions } from "./sidebar-actions";
@@ -48,14 +49,39 @@ export function BoardRow({ board, active, favorite, actions, canEdit = true }: {
   );
 }
 
+/** A workspace doc in the tree (rename happens in the doc itself). */
+export function DocRow({ doc, actions, canEdit = true }: { doc: NavDoc; actions: SidebarActions; canEdit?: boolean }) {
+  const t = useT();
+  const active = usePathname() === `/docs/${doc.id}`;
+  const items: MenuEntry[] = [
+    { label: t("chrome.openNewTab"), icon: <Open size={16} />, testId: "doc-menu-newtab", onClick: () => actions.openDocInNewTab(doc.id) },
+    { label: t("chrome.copyLink"), icon: <LinkIcon size={16} />, testId: "doc-menu-link", onClick: () => void actions.copyDocLink(doc.id) },
+    ...(canEdit ? [{ label: t("common.delete"), icon: <Delete size={16} />, danger: true, testId: "doc-menu-delete", onClick: () => actions.deleteDoc(doc.id, doc.title) }] : []),
+  ];
+  return (
+    <div className={`${styles.boardRow} ${active ? styles.boardRowActive : ""}`} data-testid={`nav-doc-${doc.id}`}>
+      <Link href={`/docs/${doc.id}`} className={styles.boardName} style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
+        {doc.icon ? <span className={styles.boardIcon} style={{ width: 18, textAlign: "center" }}>{doc.icon}</span> : <Doc size={18} className={styles.boardIcon} />}
+        <span className={styles.boardName}>{doc.title || t("docs.untitled")}</span>
+      </Link>
+      <RowMenu label={t("chrome.docMenu")} testId={`nav-doc-menu-${doc.id}`} items={items} />
+    </div>
+  );
+}
+
+const docsIn = (nav: NavData, workspaceId: string, folderId: string | null, filter: string) =>
+  nav.docs.filter((d) => d.workspaceId === workspaceId && d.folderId === folderId && d.title.toLowerCase().includes(filter));
+
 function FolderNode({ folder, nav, activeBoardId, actions, filter }: { folder: NavFolder; nav: NavData; activeBoardId: string | null; actions: SidebarActions; filter: string }) {
   const t = useT();
   const [open, setOpen] = useState(true);
   const subFolders = nav.folders.filter((f) => f.parentFolderId === folder.id);
   const boards = nav.boards.filter((b) => b.folderId === folder.id && b.name.toLowerCase().includes(filter));
-  if (filter && !boards.length && !subFolders.length) return null;
+  const docs = docsIn(nav, folder.workspaceId, folder.id, filter);
+  if (filter && !boards.length && !docs.length && !subFolders.length) return null;
   const items: MenuEntry[] = [
     { label: t("shell.addBoard"), icon: <Board size={16} />, testId: "folder-menu-newboard", onClick: () => actions.newBoard(folder.workspaceId, folder.id) },
+    { label: t("shell.addDoc"), icon: <Doc size={16} />, testId: "folder-menu-newdoc", onClick: () => actions.newDoc(folder.workspaceId, folder.id) },
     { label: t("chrome.newSubfolder"), icon: <ClassicFolder size={16} />, testId: "folder-menu-subfolder", onClick: () => actions.newFolder(folder.workspaceId, folder.id) },
     { label: t("common.rename"), icon: <Edit size={16} />, testId: "folder-menu-rename", onClick: () => actions.renameFolder(folder.id, folder.name) },
     { label: t("chrome.changeColor"), icon: <Edit size={16} />, testId: "folder-menu-color", onClick: () => actions.editFolder(folder.workspaceId, folder) },
@@ -73,22 +99,25 @@ function FolderNode({ folder, nav, activeBoardId, actions, filter }: { folder: N
         <div className={styles.treeChildren}>
           {subFolders.map((f) => <FolderNode key={f.id} folder={f} nav={nav} activeBoardId={activeBoardId} actions={actions} filter={filter} />)}
           {boards.map((b) => <BoardRow key={b.id} board={b} active={b.id === activeBoardId} favorite={nav.favorites.includes(b.id)} actions={actions} />)}
+          {docs.map((d) => <DocRow key={d.id} doc={d} actions={actions} />)}
         </div>
       )}
     </div>
   );
 }
 
-/** Folders + boards of one workspace. */
+/** Folders, boards and docs of one workspace. */
 export function WorkspaceTree({ workspaceId, nav, activeBoardId, actions, filter }: { workspaceId: string; nav: NavData; activeBoardId: string | null; actions: SidebarActions; filter: string }) {
   const t = useT();
   const rootFolders = nav.folders.filter((f) => f.workspaceId === workspaceId && !f.parentFolderId);
   const rootBoards = nav.boards.filter((b) => b.workspaceId === workspaceId && !b.folderId && b.name.toLowerCase().includes(filter));
-  const any = rootFolders.length || rootBoards.length;
+  const rootDocs = docsIn(nav, workspaceId, null, filter);
+  const any = rootFolders.length || rootBoards.length || rootDocs.length;
   return (
     <div className={styles.tree} data-testid="sidebar-tree">
       {rootFolders.map((f) => <FolderNode key={f.id} folder={f} nav={nav} activeBoardId={activeBoardId} actions={actions} filter={filter} />)}
       {rootBoards.map((b) => <BoardRow key={b.id} board={b} active={b.id === activeBoardId} favorite={nav.favorites.includes(b.id)} actions={actions} />)}
+      {rootDocs.map((d) => <DocRow key={d.id} doc={d} actions={actions} />)}
       {!any && <div className={styles.emptyHint}>{t("shell.noBoards")}</div>}
     </div>
   );

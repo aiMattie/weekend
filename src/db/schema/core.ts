@@ -76,6 +76,10 @@ export const workspaces = sqliteTable(
     kind: text("kind").$type<"open" | "closed">().notNull().default("open"),
     color: text("color"),
     icon: text("icon"),
+    /** Free-text group in the workspace switcher (e.g. "Klanten"). Null = no category. */
+    category: text("category"),
+    /** Uploaded logo: file name under <filesDir>/workspace-logos. Null = letter badge on `color`. */
+    logo: text("logo"),
     position: real("position").notNull().default(0),
     state: text("state").$type<"active" | "archived" | "deleted">().notNull().default("active"),
     createdBy: text("created_by").references(() => users.id, { onDelete: "set null" }),

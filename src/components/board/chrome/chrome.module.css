@@ -91,6 +91,10 @@
 .wsBanner { height: 210px; background: #f5f6f8; }
 .wsBody { padding: 0 64px 48px; position: relative; max-width: 1400px; }
 .wsTile { position: absolute; top: -36px; left: 64px; width: 100px; height: 100px; border-radius: 12px; border: 4px solid #fff; box-shadow: 0 0 6px rgba(0,0,0,.2); color: #fff; font-size: 44px; font-weight: 400; display: flex; align-items: center; justify-content: center; box-sizing: content-box; }
+button.wsTile { cursor: pointer; padding: 0; font-family: inherit; }
+button.wsTile:hover::after { content: ""; position: absolute; inset: 0; border-radius: 8px; background: rgba(0,0,0,.25); }
+.wsTileImg { width: 100%; height: 100%; object-fit: contain; border-radius: 8px; background: #fff; }
+.wsTileBusy { opacity: .5; }
 .wsHead { display: flex; align-items: flex-start; gap: 12px; padding: 20px 0 0 132px; min-height: 90px; }
 .wsName { margin: 0; font-size: 32px; font-weight: 500; line-height: 1.2; display: flex; align-items: center; gap: 8px; }
 .wsChevron { border: 0; background: transparent; cursor: pointer; display: inline-flex; padding: 2px; border-radius: 4px; color: #323338; }

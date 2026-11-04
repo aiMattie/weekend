@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
 import { WEEKEND_COLORS } from "@/lib/colors";
 import { useT } from "@/lib/i18n/client";
+import { workspaceCategories } from "@/lib/workspace-groups";
 import { ChromeModal } from "./modal";
 import { notifyNavChanged } from "./ops";
 import styles from "./chrome.module.css";
 
-interface WorkspaceFull { id: string; name: string; description: string | null; kind: "open" | "closed"; color: string | null }
+interface WorkspaceFull { id: string; name: string; description: string | null; kind: "open" | "closed"; color: string | null; category: string | null }
 
 /** Create (no `workspaceId`) or edit a workspace. */
 export function WorkspaceDialog({ workspaceId, onClose, onSaved }: { workspaceId?: string; onClose: () => void; onSaved: (id: string, created: boolean) => void }) {
   const t = useT();
-  const [form, setForm] = useState<{ name: string; description: string; kind: "open" | "closed"; color: string }>({ name: workspaceId ? "" : t("shell.newWorkspaceName"), description: "", kind: "open", color: "#0073ea" });
+  const [form, setForm] = useState<{ name: string; description: string; kind: "open" | "closed"; color: string; category: string }>({ name: workspaceId ? "" : t("shell.newWorkspaceName"), description: "", kind: "open", color: "#0073ea", category: "" });
+  const [categories, setCategories] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(!workspaceId);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,16 +24,22 @@ export function WorkspaceDialog({ workspaceId, onClose, onSaved }: { workspaceId
     let alive = true;
     api.get<WorkspaceFull>(`/api/v1/workspaces/${workspaceId}`).then((w) => {
       if (!alive) return;
-      setForm({ name: w.name, description: w.description ?? "", kind: w.kind, color: w.color ?? "#0073ea" });
+      setForm({ name: w.name, description: w.description ?? "", kind: w.kind, color: w.color ?? "#0073ea", category: w.category ?? "" });
       setLoaded(true);
     }).catch((e) => setError(e instanceof Error ? e.message : t("common.error")));
     return () => { alive = false; };
   }, [workspaceId, t]);
 
+  useEffect(() => {
+    let alive = true;
+    api.get<WorkspaceFull[]>("/api/v1/workspaces").then((list) => { if (alive) setCategories(workspaceCategories(list)); }).catch(() => {});
+    return () => { alive = false; };
+  }, []);
+
   const submit = async () => {
     if (!form.name.trim()) return;
     try {
-      const body = { name: form.name.trim(), description: form.description.trim() || null, kind: form.kind, color: form.color };
+      const body = { name: form.name.trim(), description: form.description.trim() || null, kind: form.kind, color: form.color, category: form.category.trim() || null };
       const w = workspaceId ? await api.patch<WorkspaceFull>(`/api/v1/workspaces/${workspaceId}`, body) : await api.post<WorkspaceFull>("/api/v1/workspaces", body);
       notifyNavChanged();
       onSaved(w.id, !workspaceId);
@@ -50,6 +58,12 @@ export function WorkspaceDialog({ workspaceId, onClose, onSaved }: { workspaceId
         <label className={styles.field}>
           <span className={styles.label}>{t("chrome.description")}</span>
           <textarea className={styles.textarea} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} data-testid="workspace-description" />
+        </label>
+        <label className={styles.field}>
+          <span className={styles.label}>{t("chrome.wsCategory")}</span>
+          <input className={styles.input} value={form.category} maxLength={60} list="workspace-category-options" onChange={(e) => setForm({ ...form, category: e.target.value })} data-testid="workspace-category" />
+          <datalist id="workspace-category-options">{categories.map((c) => <option key={c} value={c} />)}</datalist>
+          <span className={styles.hint}>{t("chrome.wsCategoryHint")}</span>
         </label>
         <div className={styles.radioList}>
           {(["open", "closed"] as const).map((k) => (

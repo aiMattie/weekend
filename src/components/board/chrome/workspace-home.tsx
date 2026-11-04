@@ -1,10 +1,10 @@
 "use client";
 
 import { Icon } from "@vibe/core";
-import { Board, DropdownChevronDown, Favorite, Locked, Menu as DotsIcon, Time, Workspace as WorkspaceIcon, Team } from "@vibe/icons";
+import { Board, Doc, DropdownChevronDown, Favorite, Locked, Menu as DotsIcon, Time, Workspace as WorkspaceIcon, Team } from "@vibe/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { UserAvatar } from "@/components/columns/shared";
 import { ActionMenu } from "@/components/board/ui/menu";
 import { api } from "@/lib/api-client";
@@ -14,8 +14,9 @@ import { useDialogs } from "./use-dialogs";
 import styles from "./chrome.module.css";
 
 export interface WsHomeData {
-  workspace: { id: string; name: string; description: string | null; kind: "open" | "closed"; color: string | null };
+  workspace: { id: string; name: string; description: string | null; kind: "open" | "closed"; color: string | null; logoUrl: string | null };
   boards: { id: string; name: string; kind: string; folderId: string | null; visibility: string }[];
+  docs: { id: string; title: string; folderId: string | null; icon: string | null }[];
   folders: { id: string; name: string; parentFolderId: string | null }[];
   recentIds: string[];
   favoriteIds: string[];
@@ -36,6 +37,37 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
   const [favs, setFavs] = useState(new Set(data.favoriteIds));
   const color = ws.color ?? "#0073ea";
   const refresh = () => { notifyNavChanged(); router.refresh(); };
+  const [logoUrl, setLogoUrl] = useState(ws.logoUrl);
+  const [logoEl, setLogoEl] = useState<HTMLElement | null>(null);
+  const [logoBusy, setLogoBusy] = useState(false);
+  const [logoError, setLogoError] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const uploadLogo = async (file: File) => {
+    setLogoBusy(true); setLogoError(null);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const r = await fetch(`/api/v1/workspaces/${ws.id}/logo`, { method: "POST", body: fd });
+      const body = await r.json().catch(() => null) as { logoUrl?: string | null; error?: { message?: string } } | null;
+      if (!r.ok) throw new Error(body?.error?.message ?? t("common.error"));
+      setLogoUrl(body?.logoUrl ?? null);
+      refresh();
+    } catch (e) {
+      setLogoError(e instanceof Error ? e.message : t("common.error"));
+    } finally {
+      setLogoBusy(false);
+    }
+  };
+  const removeLogo = async () => {
+    setLogoError(null);
+    try { await api.del(`/api/v1/workspaces/${ws.id}/logo`); setLogoUrl(null); refresh(); } catch (e) { setLogoError(e instanceof Error ? e.message : t("common.error")); }
+  };
+  const newDoc = async (folderId: string | null = null) => {
+    const d = await api.post<{ id: string }>("/api/v1/docs", { workspaceId: ws.id, folderId, title: t("docs.untitled") });
+    notifyNavChanged();
+    router.push(`/docs/${d.id}`);
+  };
 
   const toggleFav = async (id: string) => {
     setFavs((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
@@ -56,6 +88,15 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
     </div>
   );
 
+  const docRow = (d: WsHomeData["docs"][number]) => (
+    <div key={d.id} className={styles.wsRow} data-testid="ws-doc-row">
+      <Link href={`/docs/${d.id}`} className={styles.wsRowLink}>
+        {d.icon ? <span style={{ width: 18, textAlign: "center" }}>{d.icon}</span> : <Icon icon={Doc} size={18} ignoreFocusStyle />}
+        <span>{d.title || t("docs.untitled")}</span>
+      </Link>
+    </div>
+  );
+
   const byId = new Map(data.boards.map((b) => [b.id, b]));
   const recents = data.recentIds.map((id) => byId.get(id)).filter(Boolean) as WsHomeData["boards"];
   const recentRows = recents.length ? recents : data.boards.slice(0, 8);
@@ -65,6 +106,7 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
       <div key={f.id} data-testid="ws-folder">
         <div className={styles.wsFolder} style={{ paddingLeft: 8 + depth * 20 }}>{f.name}</div>
         {data.boards.filter((b) => b.folderId === f.id).map((b) => <div key={b.id} style={{ paddingLeft: (depth + 1) * 20 }}>{boardRow(b)}</div>)}
+        {data.docs.filter((d) => d.folderId === f.id).map((d) => <div key={d.id} style={{ paddingLeft: (depth + 1) * 20 }}>{docRow(d)}</div>)}
         {folderTree(f.id, depth + 1)}
       </div>
     ));
@@ -79,7 +121,27 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
     <div className={styles.wsPage} data-testid="workspace-page">
       <div className={styles.wsBanner} />
       <div className={styles.wsBody}>
-        <div className={styles.wsTile} style={{ background: color }} data-testid="ws-tile">{ws.name.replace(/[^\p{L}\p{N}]/gu, "").charAt(0).toUpperCase()}</div>
+        {(() => {
+          // eslint-disable-next-line @next/next/no-img-element -- authenticated API image
+          const inner = logoUrl ? <img src={logoUrl} alt={t("chrome.workspaceLogo")} className={styles.wsTileImg} data-testid="ws-logo" /> : ws.name.replace(/[^\p{L}\p{N}]/gu, "").charAt(0).toUpperCase();
+          const style = { background: logoUrl ? "#fff" : color };
+          return data.canManage ? (
+            <button type="button" className={`${styles.wsTile} ${logoBusy ? styles.wsTileBusy : ""}`} style={style} onClick={(e) => setLogoEl(logoEl ? null : e.currentTarget)} aria-label={t("chrome.workspaceLogo")} aria-haspopup="menu" title={t("chrome.logoHint")} data-testid="ws-tile">{inner}</button>
+          ) : <div className={styles.wsTile} style={style} data-testid="ws-tile">{inner}</div>;
+        })()}
+        <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/webp,image/gif" hidden data-testid="ws-logo-input"
+          onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void uploadLogo(f); }} />
+        {logoEl ? (
+          <ActionMenu
+            anchorEl={logoEl}
+            onClose={() => setLogoEl(null)}
+            items={[
+              { title: t("chrome.logoHint") },
+              { label: logoUrl ? t("chrome.logoReplace") : t("chrome.logoUpload"), testId: "ws-logo-upload", onClick: () => fileRef.current?.click() },
+              ...(logoUrl ? [{ label: t("chrome.logoRemove"), danger: true, testId: "ws-logo-remove", onClick: () => void removeLogo() }] : []),
+            ]}
+          />
+        ) : null}
         <div className={styles.wsHead}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <h1 className={styles.wsName} data-testid="ws-name">
@@ -89,6 +151,7 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
             <button type="button" className={styles.wsDesc} disabled={!data.canManage} onClick={() => dialogs.open({ kind: "workspace", workspaceId: ws.id, onSaved: refresh })} data-testid="ws-description">
               {ws.description || t("chrome.addWorkspaceDescription")}
             </button>
+            {logoError ? <div className={styles.hint} role="alert" style={{ color: "#d83a52" }} data-testid="ws-logo-error">{logoError}</div> : null}
           </div>
           <span className={styles.wsMembers}>{data.members.slice(0, 3).map((m) => <UserAvatar key={m.userId} user={{ id: m.userId, name: m.name, photoUrl: null }} />)}</span>
           <button type="button" className={styles.wsInvite} onClick={() => setTab("collaborators")} data-testid="ws-invite">{t("board.invite")} / {data.members.length}</button>
@@ -100,6 +163,7 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
               onClose={() => setMenuEl(null)}
               items={[
                 { label: t("shell.addBoard"), testId: "workspace-add-board", onClick: () => dialogs.open({ kind: "add-board", workspaceId: ws.id, onCreated: (id) => router.push(`/boards/${id}`) }) },
+                { label: t("shell.addDoc"), testId: "workspace-add-doc", onClick: () => void newDoc() },
                 { label: t("shell.addFolder"), testId: "workspace-add-folder", onClick: () => dialogs.open({ kind: "folder", workspaceId: ws.id, onSaved: refresh }) },
                 { label: t("chrome.editWorkspace"), testId: "workspace-edit", disabled: !data.canManage, onClick: () => dialogs.open({ kind: "workspace", workspaceId: ws.id, onSaved: refresh }) },
                 { divider: true },
@@ -120,7 +184,8 @@ export function WorkspaceHome({ data }: { data: WsHomeData }) {
             <>
               {folderTree(null, 0)}
               {data.boards.filter((b) => !b.folderId).map(boardRow)}
-              {data.boards.length === 0 && data.folders.length === 0 ? <div className={styles.empty}>{t("chrome.noBoardsYet")}</div> : null}
+              {data.docs.filter((d) => !d.folderId).map(docRow)}
+              {data.boards.length === 0 && data.docs.length === 0 && data.folders.length === 0 ? <div className={styles.empty}>{t("chrome.noBoardsYet")}</div> : null}
             </>
           ) : null}
           {tab === "collaborators" ? (

@@ -71,6 +71,7 @@ export function DocPage({ initial, users, currentUserId, isAdmin, crumbs }: DocP
     try {
       const r = await fetch(`/api/v1/docs/${initial.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), keepalive: true });
       if (!r.ok) throw new Error(String(r.status));
+      if (sent.title !== undefined) window.dispatchEvent(new Event("weekend:nav-changed")); // sidebar shows the doc title
       setSaveState(pending.current.blocks || pending.current.title !== undefined ? "dirty" : "saved");
     } catch {
       pending.current = { blocks: pending.current.blocks || sent.blocks, title: pending.current.title ?? sent.title };

@@ -10,7 +10,7 @@ import type { McpToolDefinition } from "./types";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Tool<T = any> = McpToolDefinition<T>;
 
-const ws = (w: { id: string; name: string; kind: string; description: string | null; state: string }) => ({ id: w.id, name: w.name, kind: w.kind, description: w.description, state: w.state });
+const ws = (w: { id: string; name: string; kind: string; description: string | null; category: string | null; state: string }) => ({ id: w.id, name: w.name, kind: w.kind, description: w.description, category: w.category, state: w.state });
 
 const listWorkspaces: Tool = {
   name: "list_workspaces", description: "List the workspaces the token can see.",
@@ -44,11 +44,11 @@ const createWorkspace: Tool = {
 };
 
 const updateWorkspace: Tool = {
-  name: "update_workspace", description: "Rename a workspace or change its description/kind.",
-  inputSchema: z.object({ workspace_id: id, name: z.string().optional(), kind: z.enum(["open", "closed"]).optional(), description: z.string().optional() }),
+  name: "update_workspace", description: "Rename a workspace or change its description/kind/category. The category groups workspaces in the switcher (e.g. \"Klanten\"); an empty string removes it.",
+  inputSchema: z.object({ workspace_id: id, name: z.string().optional(), kind: z.enum(["open", "closed"]).optional(), description: z.string().optional(), category: z.string().max(60).optional() }),
   handler(actor, i) {
     const patch: Record<string, unknown> = {};
-    for (const k of ["name", "kind", "description"] as const) if (i[k] !== undefined) patch[k] = i[k];
+    for (const k of ["name", "kind", "description", "category"] as const) if (i[k] !== undefined) patch[k] = i[k];
     return ws(services.workspaces.update(actor, i.workspace_id, patch));
   },
 };
