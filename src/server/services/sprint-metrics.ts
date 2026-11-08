@@ -42,10 +42,16 @@ export function nextMonday(date: string): string {
   return d;
 }
 
-/** Default dates of the sprint after one ending on `prevEndsOn`: Monday to Friday of the week after (2 weeks). */
-export function nextSprintDates(prevEndsOn: string | null, today: string): { startsOn: string; endsOn: string } {
+/** Sprint length when the sprints board does not set one (boards.settings.dev.sprintWeeks). */
+export const DEFAULT_SPRINT_WEEKS = 2;
+
+/** Last day of a sprint of `weeks` weeks that starts on `startsOn`: the Friday of its last week when it starts on a Monday. */
+export const sprintEndsOn = (startsOn: string, weeks = DEFAULT_SPRINT_WEEKS): string => addDays(startsOn, weeks * 7 - 3);
+
+/** Default dates of the sprint after one ending on `prevEndsOn`: from the next Monday, `weeks` weeks long (Mon-Fri). */
+export function nextSprintDates(prevEndsOn: string | null, today: string, weeks = DEFAULT_SPRINT_WEEKS): { startsOn: string; endsOn: string } {
   const startsOn = nextMonday(addDays(prevEndsOn ?? addDays(today, -1), 1));
-  return { startsOn, endsOn: addDays(startsOn, 11) };
+  return { startsOn, endsOn: sprintEndsOn(startsOn, weeks) };
 }
 
 const weight = (r: HistRow, unit: Unit): number => (unit === "count" ? 1 : r.points);

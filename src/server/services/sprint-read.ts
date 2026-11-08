@@ -12,6 +12,7 @@ import { boardColumns, requireBoard } from "./_shared";
 import { activeGroups } from "./groups";
 import { devColumns, getDevSettings, loadEpicInfo, loadTasks, sourceBoardsOf, sprintsBoardFor, type EpicInfo, type Task } from "./dev-config";
 import { getSprintRow, histRows, reconcile, type SprintRow } from "./sprint-sync";
+import { DEFAULT_SPRINT_WEEKS } from "./sprint-metrics";
 
 export interface SprintDto {
   id: string;
@@ -44,7 +45,7 @@ export function toDto(row: SprintRow): SprintDto {
   };
 }
 
-export function sprintsBoard(actor: Actor, boardId: string, action: "board:view" | "board:edit_items") {
+export function sprintsBoard(actor: Actor, boardId: string, action: "board:view" | "board:edit_items" | "board:edit_structure") {
   const b = requireBoard(actor, boardId, action);
   if (b.kind !== "dev_sprints") throw new ValidationError("Board is not a sprint board");
   return b;
@@ -119,6 +120,8 @@ export interface Planning {
   /** where new tasks are created from the planning view */
   taskBoard: { id: string; groupId: string } | null;
   estimateUnit: "hours" | "points";
+  /** sprint length in weeks (settings of the sprints board) */
+  sprintWeeks: number;
   sprints: (SprintDto & { tasks: Task[] })[];
   backlog: Task[];
   klanten: string[];
@@ -149,6 +152,7 @@ export function planning(actor: Actor, boardId: string): Planning {
   return {
     sprintsBoardId: sb, sourceBoardIds: sources, taskBoard: tb && group ? { id: tb, groupId: group.id } : null,
     estimateUnit: settings?.estimateUnit ?? "hours",
+    sprintWeeks: settings?.sprintWeeks || DEFAULT_SPRINT_WEEKS,
     sprints: open.map((s) => ({ ...s, tasks: tasks.filter((t) => t.sprintId === s.id) })),
     // open work still pointing at a completed sprint would be invisible: it belongs in the backlog
     backlog: tasks.filter((t) => !t.isDone && (!t.sprintId || !live.has(t.sprintId))).sort((a, b) => (PRIO_RANK[a.prioriteit ?? ""] ?? 9) - (PRIO_RANK[b.prioriteit ?? ""] ?? 9) || a.position - b.position),

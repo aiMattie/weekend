@@ -24,6 +24,8 @@ export interface DevSettings {
   bugsBoardId?: string;
   tasksBoardId?: string;
   estimateUnit?: "hours" | "points";
+  /** sprint length in weeks (set on the sprints board; default DEFAULT_SPRINT_WEEKS) */
+  sprintWeeks?: number;
 }
 
 export const DONE_FALLBACK = ["done", "afgerond", "klaar", "gesloten"];

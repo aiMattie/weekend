@@ -11,6 +11,7 @@ import { apiTools } from "./platform-api";
 import { dataTools } from "./platform-data";
 import { moreTools } from "./platform-more";
 import { devRequestTools } from "./dev-requests";
+import { devSprintTools } from "./dev-sprints";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const tools: McpToolDefinition<any>[] = [
@@ -21,6 +22,7 @@ const tools: McpToolDefinition<any>[] = [
   ...dataTools,
   ...moreTools,
   ...devRequestTools,
+  ...devSprintTools,
   // ...boardTools,   <- add `...<module>Tools` above this line
 ];
 
