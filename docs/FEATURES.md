@@ -250,7 +250,7 @@ Gehost op `/api/mcp`. Auth via API-token, OAuth-app of dynamic client registrati
 - Automations en workflows: `list_automations`, `manage_automations`, `create_automation`, `plan_workflow`, `create_workflow`, `update_workflow`, `publish_workflow`
 - Agents: `manage_agent`, `manage_agent_triggers`, `manage_agent_skills`, `manage_agent_knowledge`, `agent_catalog`
 - Meetings: `get_notetaker_meetings`
-- Sprints: `get_weekend_dev_sprints_boards`, `get_sprints_metadata`, `get_sprint_summary`
+- Sprints: `get_weekend_dev_sprints_boards`, `get_sprints_metadata`, `get_sprint_summary`, `create_sprint`, `update_sprint`, `start_sprint`, `complete_sprint`, `update_sprint_settings`
 - API en schema: `all_weekend_api`, `get_graphql_schema`, `get_type_details`
 - UI-componenten: `show_table`, `show_chart`, `show_battery`, `show_assign`
 - Tool-aanroepen tellen mee voor het dagelijkse API-limiet

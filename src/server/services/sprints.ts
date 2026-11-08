@@ -12,13 +12,13 @@ import { ConflictError, NotFoundError, ValidationError } from "../../lib/errors"
 import { nowIso } from "../../lib/time";
 import { idSchema, nameSchema } from "../../lib/zod-schemas";
 import { db } from "../../db/client";
-import { items } from "../../db/schema/core";
+import { boards, items } from "../../db/schema/core";
 import { sprintItems, sprints, type SprintResult, type SprintState } from "../../db/schema/sprints";
 import { activeGroups } from "./groups";
 import * as itemsSvc from "./items";
 import { boardColumns, parse, record, requireBoard } from "./_shared";
-import { devColumns, loadTasks, sourceBoardsOf, sprintsBoardFor, type Task } from "./dev-config";
-import { addDays, dayOf, nextSprintDates, scopeChange } from "./sprint-metrics";
+import { devColumns, getDevSettings, loadTasks, setDevSettings, sourceBoardsOf, sprintsBoardFor, type Task } from "./dev-config";
+import { DEFAULT_SPRINT_WEEKS, dayOf, nextSprintDates, scopeChange, sprintEndsOn } from "./sprint-metrics";
 import { adoptSprintItems, sprintsBoard, toDto, toDtoLite, type SprintDto } from "./sprint-read";
 import { syncEpicsOfSprintsBoard } from "./epic-lifecycle";
 import { ensureDevHooks, getSprintRow, histRows, reconcile, syncItem, withoutHooks, type SprintRow } from "./sprint-sync";
@@ -32,6 +32,7 @@ const dateStr = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD
 const createInput = z.object({ boardId: idSchema, name: nameSchema.optional(), goal: z.string().max(2000).nullish(), startsOn: dateStr.optional(), endsOn: dateStr.optional() });
 const updateInput = z.object({ name: nameSchema.optional(), goal: z.string().max(2000).nullish(), startsOn: dateStr.optional(), endsOn: dateStr.optional() });
 const completeInput = z.object({ carryOver: z.enum(["next", "backlog"]).default("next"), nextSprintId: idSchema.nullish() });
+const settingsInput = z.object({ sprintWeeks: z.number().int().min(1, "Minimaal 1 week").max(4, "Maximaal 4 weken") });
 
 const STATUS_FOR: Record<SprintState, string> = { planned: "Gepland", active: "Actief", completed: "Afgerond" };
 
@@ -55,6 +56,29 @@ function syncSprintItem(actor: Actor, s: SprintRow): void {
   }
 }
 
+/* ------------------------------------------------------------------ settings */
+
+/** Sprint length in weeks of a sprints board. */
+export function sprintWeeksOf(sprintsBoardId: string): number {
+  const b = db.select().from(boards).where(eq(boards.id, sprintsBoardId)).get();
+  return (b && getDevSettings(b)?.sprintWeeks) || DEFAULT_SPRINT_WEEKS;
+}
+
+export interface SprintSettings { sprintWeeks: number }
+
+export function sprintSettings(actor: Actor, boardId: string): SprintSettings {
+  const board = sprintsBoard(actor, boardId, "board:view");
+  return { sprintWeeks: sprintWeeksOf(board.id) };
+}
+
+/** Change the sprint length. Applies to sprints created or started from now on; existing dates stay. */
+export function updateSprintSettings(actor: Actor, boardId: string, input: unknown): SprintSettings {
+  const d = parse(settingsInput, input);
+  const board = sprintsBoard(actor, boardId, "board:edit_structure");
+  setDevSettings(board.id, { sprintWeeks: d.sprintWeeks });
+  return { sprintWeeks: d.sprintWeeks };
+}
+
 /* ------------------------------------------------------------------ lifecycle */
 
 export function createSprint(actor: Actor, input: unknown): SprintDto {
@@ -63,7 +87,8 @@ export function createSprint(actor: Actor, input: unknown): SprintDto {
   adoptSprintItems(board.id);
   const existing = db.select().from(sprints).where(eq(sprints.boardId, board.id)).orderBy(asc(sprints.position)).all();
   const last = existing[existing.length - 1];
-  const dates = d.startsOn && d.endsOn ? { startsOn: d.startsOn, endsOn: d.endsOn } : d.startsOn ? { startsOn: d.startsOn, endsOn: addDays(d.startsOn, 11) } : nextSprintDates(last?.endsOn ?? null, dayOf(nowIso()));
+  const weeks = sprintWeeksOf(board.id);
+  const dates = d.startsOn && d.endsOn ? { startsOn: d.startsOn, endsOn: d.endsOn } : d.startsOn ? { startsOn: d.startsOn, endsOn: sprintEndsOn(d.startsOn, weeks) } : nextSprintDates(last?.endsOn ?? null, dayOf(nowIso()), weeks);
   if (dates.endsOn < dates.startsOn) throw new ValidationError("Einddatum ligt voor de startdatum");
   const nums = existing.map((s) => Number(/(\d+)\s*$/.exec(s.name)?.[1] ?? 0));
   const name = d.name ?? `Sprint ${Math.max(0, ...nums, existing.length) + 1}`;
@@ -107,7 +132,7 @@ export function startSprint(actor: Actor, sprintId: string): SprintDto {
   const now = nowIso();
   const today = dayOf(now);
   const startsOn = !cur.startsOn || cur.startsOn > today ? today : cur.startsOn;
-  const endsOn = !cur.endsOn || cur.endsOn < today ? addDays(today, 11) : cur.endsOn;
+  const endsOn = !cur.endsOn || cur.endsOn < today ? sprintEndsOn(today, sprintWeeksOf(cur.boardId)) : cur.endsOn;
   const rows = histRows(sprintId);
   const committed = { count: rows.length, points: Math.round(rows.reduce((s, r) => s + r.points, 0) * 10) / 10 };
   const row = db.update(sprints).set({ state: "active", startedAt: now, startsOn, endsOn, committed }).where(eq(sprints.id, sprintId)).returning().get();
@@ -141,7 +166,7 @@ export function completeSprint(actor: Actor, sprintId: string, input: unknown = 
     } else {
       next = db.select().from(sprints).where(and(eq(sprints.boardId, cur.boardId), eq(sprints.state, "planned"))).orderBy(asc(sprints.position)).get() ?? null;
       if (!next) {
-        const dates = nextSprintDates(cur.endsOn, dayOf(now));
+        const dates = nextSprintDates(cur.endsOn, dayOf(now), sprintWeeksOf(cur.boardId));
         const created = createSprint(actor, { boardId: cur.boardId, ...dates });
         next = getSprintRow(created.id);
       }

@@ -8,6 +8,7 @@ import { listMcpTools } from "../../src/server/mcp/tools/registry";
 import { dataTools } from "../../src/server/mcp/tools/platform-data";
 import { moreTools } from "../../src/server/mcp/tools/platform-more";
 import { devRequestTools } from "../../src/server/mcp/tools/dev-requests";
+import { devSprintTools } from "../../src/server/mcp/tools/dev-sprints";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let c: PCtx;
@@ -32,7 +33,7 @@ beforeAll(async () => {
 });
 afterAll(async () => {
   await m.close();
-  const elsewhere = new Set([...dataTools, ...moreTools, ...devRequestTools].map((t) => t.name)); // covered in tests/mcp
+  const elsewhere = new Set([...dataTools, ...moreTools, ...devRequestTools, ...devSprintTools].map((t) => t.name)); // covered in tests/mcp
   const missing = listMcpTools().map((t) => t.name).filter((n) => !called.has(n) && !elsewhere.has(n));
   expect(missing, "tools never called by this test").toEqual([]);
 });

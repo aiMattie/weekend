@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { addDays, burndownSeries, cycleTimes, nextSprintDates, scopeChange, totals, workload, type HistRow } from "../../src/server/services/sprint-metrics";
+import { addDays, burndownSeries, cycleTimes, nextSprintDates, scopeChange, sprintEndsOn, totals, workload, type HistRow } from "../../src/server/services/sprint-metrics";
 
 const row = (over: Partial<HistRow>): HistRow => ({ itemId: "1", addedAt: "2026-10-05T07:00:00.000Z", removedAt: null, addedAfterStart: false, points: 5, startedAt: null, doneAt: null, outcome: null, ...over });
 
@@ -72,5 +72,11 @@ describe("sprint dates", () => {
   it("next sprint starts on the Monday after the previous one and lasts two weeks (Mon-Fri)", () => {
     expect(nextSprintDates("2026-10-16", "2026-10-10")).toEqual({ startsOn: "2026-10-19", endsOn: "2026-10-30" });
     expect(addDays("2026-10-31", 1)).toBe("2026-11-01");
+  });
+  it("follows the sprint length in weeks (Mon-Fri)", () => {
+    expect(nextSprintDates("2026-11-01", "2026-11-08", 1)).toEqual({ startsOn: "2026-11-02", endsOn: "2026-11-06" });
+    expect(sprintEndsOn("2026-11-09", 1)).toBe("2026-11-13");
+    expect(sprintEndsOn("2026-11-09", 3)).toBe("2026-11-27");
+    expect(sprintEndsOn("2026-11-09")).toBe("2026-11-20");
   });
 });

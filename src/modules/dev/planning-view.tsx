@@ -80,6 +80,9 @@ export function PlanningView({ board, onOpenItem, canEdit }: ViewProps) {
     <div className={styles.page} data-testid="planning-view">
       <div className={styles.toolbar}>
         <button type="button" className={`${styles.btn} ${styles.btnPrimary}`} disabled={!canEdit} onClick={() => void run(() => api.post(`/api/v1/dev/boards/${data.sprintsBoardId}/sprints`, {}))} data-testid="create-sprint"><Icon icon={Add} size={16} ignoreFocusStyle />{t("dev.createSprint")}</button>
+        <select className={styles.select} value={data.sprintWeeks} disabled={!canEdit} onChange={(e) => { const sprintWeeks = Number(e.target.value); setData((cur) => (cur ? { ...cur, sprintWeeks } : cur)); void run(() => api.patch(`/api/v1/dev/boards/${data.sprintsBoardId}/sprint-settings`, { sprintWeeks })); }} data-testid="sprint-length" aria-label={t("dev.sprintLength")} title={t("dev.sprintLength")}>
+          {[1, 2, 3, 4].map((w) => <option key={w} value={w}>{w === 1 ? t("dev.sprintWeek") : t("dev.sprintWeeks", { count: w })}</option>)}
+        </select>
         <input className={styles.input} placeholder={t("dev.search")} value={filter.search} onChange={(e) => setFilter({ ...filter, search: e.target.value })} data-testid="planning-search" aria-label={t("dev.search")} />
         <Select value={filter.klant} onChange={(klant) => setFilter({ ...filter, klant })} options={data.klanten.map((k) => ({ value: k, label: k }))} placeholder={t("dev.allKlanten")} testId="filter-klant" />
         <Select value={filter.epic} onChange={(epic) => setFilter({ ...filter, epic })} options={epicOptions.map((e) => ({ value: e.id, label: e.klant && !filter.klant ? `${e.klant} · ${e.name}` : e.name }))} placeholder={t("dev.allEpics")} testId="filter-epic" />
