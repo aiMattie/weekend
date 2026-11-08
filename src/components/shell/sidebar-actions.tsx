@@ -11,7 +11,7 @@ import { NamePrompt } from "./name-prompt";
 type Prompt = { kind: "rename-folder"; id: string; name: string } | null;
 
 /**
- * All sidebar mutations (create/rename/duplicate/move/archive/delete board, folder, workspace).
+ * All sidebar mutations (create/rename/duplicate/move/archive/delete board, doc, folder, workspace).
  * The dialogs themselves live in src/components/board/chrome (table-ux); this hook only wires them.
  */
 export function useSidebarActions(onWorkspaceCreated: (id: string) => void) {
@@ -72,6 +72,13 @@ export function useSidebarActions(onWorkspaceCreated: (id: string) => void) {
     deleteFolder: (id: string, name: string) => confirm(t("chrome.deleteFolderTitle"), t("chrome.deleteFolderMessage", { name }), t("common.delete"), async () => { await api.del(`/api/v1/folders/${id}`); }),
     toggleFavorite: (id: string) => run(async () => { await toggleFavorite(id); }),
     copyLink: (id: string) => copyText(absoluteBoardUrl(id)),
+    newDoc: (workspaceId: string, folderId?: string | null) => run(async () => {
+      const d = await api.post<{ id: string }>("/api/v1/docs", { workspaceId, folderId: folderId ?? null, title: t("docs.untitled") });
+      router.push(`/docs/${d.id}`);
+    }),
+    deleteDoc: (id: string, title: string) => confirm(t("chrome.deleteDocTitle"), t("chrome.deleteDocMessage", { name: title }), t("common.delete"), async () => { await api.del(`/api/v1/docs/${id}`); }),
+    copyDocLink: (id: string) => copyText(`${window.location.origin}/docs/${id}`),
+    openDocInNewTab: (id: string) => window.open(`/docs/${id}`, "_blank", "noopener"),
     openInNewTab: (id: string) => window.open(`/boards/${id}`, "_blank", "noopener"),
   };
 }

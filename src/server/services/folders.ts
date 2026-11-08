@@ -7,6 +7,7 @@ import { assertCan } from "../../lib/permissions";
 import { hexColor, idSchema, nameSchema } from "../../lib/zod-schemas";
 import { db } from "../../db/client";
 import { boards, folders } from "../../db/schema/core";
+import { docs } from "../../db/schema/docs";
 import { computePosition, parse } from "./_shared";
 import * as workspaces from "./workspaces";
 
@@ -61,6 +62,7 @@ export function remove(actor: Actor, id: string): void {
     for (const x of all) if (x.parentFolderId && ids.has(x.parentFolderId) && !ids.has(x.id)) { ids.add(x.id); grew = true; }
   }
   db.update(boards).set({ folderId: null }).where(inArray(boards.folderId, [...ids])).run();
+  db.update(docs).set({ folderId: null }).where(inArray(docs.folderId, [...ids])).run();
   db.delete(folders).where(and(eq(folders.workspaceId, f.workspaceId), inArray(folders.id, [...ids]))).run();
   changed(actor);
 }

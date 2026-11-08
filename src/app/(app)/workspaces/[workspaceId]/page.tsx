@@ -3,7 +3,7 @@ import { requireUser, userToActor } from "@/lib/auth";
 import { ServiceError } from "@/lib/errors";
 import { translate, type Locale } from "@/lib/i18n";
 import { can } from "@/lib/permissions";
-import { boards, folders, recent, workspaces } from "@/server/services";
+import { boards, docs, folders, recent, workspaces } from "@/server/services";
 import styles from "@/components/shell/shell.module.css";
 
 export const dynamic = "force-dynamic";
@@ -14,8 +14,9 @@ function load(actor: ReturnType<typeof userToActor>, workspaceId: string): WsHom
     const list = boards.list(actor, { workspaceId });
     const ids = new Set(list.map((b) => b.id));
     return {
-      workspace: { id: ws.id, name: ws.name, description: ws.description, kind: ws.kind, color: ws.color },
+      workspace: { id: ws.id, name: ws.name, description: ws.description, kind: ws.kind, color: ws.color, logoUrl: workspaces.logoUrl(ws) },
       boards: list.map((b) => ({ id: b.id, name: b.name, kind: b.kind, folderId: b.folderId, visibility: b.visibility })),
+      docs: docs.list(actor, { workspaceId, limit: 500 }).filter((d) => !d.itemId).sort((a, b) => a.title.localeCompare(b.title, "nl")).map((d) => ({ id: d.id, title: d.title, folderId: d.folderId, icon: d.icon })),
       folders: folders.list(actor, workspaceId).map((f) => ({ id: f.id, name: f.name, parentFolderId: f.parentFolderId })),
       recentIds: recent.list(actor, 30).map((r) => r.board.id).filter((id) => ids.has(id)).slice(0, 10),
       favoriteIds: boards.listFavorites(actor).map((b) => b.id),

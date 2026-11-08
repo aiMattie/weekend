@@ -61,6 +61,6 @@ export const baseSdl = /* GraphQL */ `
   input CreateDocInput { workspace: CreateDocWorkspaceInput, board: CreateDocBoardInput }
   input CreateDocWorkspaceInput { workspace_id: ID!, name: String!, kind: BoardKind, folder_id: ID }
   input CreateDocBoardInput { item_id: ID!, column_id: String! }
-  input UpdateWorkspaceAttributesInput { name: String, description: String, kind: WorkspaceKind }
+  input UpdateWorkspaceAttributesInput { name: String, description: String, kind: WorkspaceKind, category: String }
   input UpdateFolderAttributes { name: String, color: String }
 `;

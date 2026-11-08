@@ -75,7 +75,12 @@ De explorer voert de query uit als jijzelf, met dezelfde limieten als een token.
 
 Claude (claude.ai, Claude Desktop, de mobiele Claude-app en Claude Code) verbindt via OAuth: je logt één keer in en geeft toestemming. De stappen staan ook in de app onder **Mijn profiel > Claude koppelen**, met de juiste URL om te kopiëren.
 
-**claude.ai, Claude Desktop en de Claude-app**
+Welke manier werkt, hangt af van waar deze omgeving bereikbaar is:
+
+- **Vanaf internet**: alle manieren hieronder.
+- **Alleen via een VPN, of op je eigen computer** (`localhost`): de extensie voor Claude Desktop en Claude Code. Die draaien op je eigen computer en maken van daaruit verbinding. Een connector van claude.ai werkt dan niet, want claude.ai roept de connector aan vanaf de servers van Anthropic, ook als je hem in Claude Desktop of de app gebruikt. Heeft de beheerder connectors van claude.ai uitgezet, dan staan die stappen niet in **Mijn profiel**.
+
+**claude.ai, Claude Desktop en de Claude-app (connector)**
 
 1. Open **Mijn profiel** (rechtsboven op je avatar) en kopieer bij **Claude koppelen** de **connector-URL**: `https://weekend.example.com/api/mcp`.
 2. Open claude.ai en ga naar **Instellingen > Connectors**.
@@ -88,7 +93,20 @@ Claude (claude.ai, Claude Desktop, de mobiele Claude-app en Claude Code) verbind
 6. Klik op **Toestaan**. Je gaat terug naar Claude en de connector staat op verbonden.
 7. De connector werkt nu ook in Claude Desktop en de mobiele app. Zet hem per gesprek aan via het menu **Connectors**.
 
+**Claude Desktop (extensie)**
+
+1. Open **Mijn profiel** en klik bij **Claude koppelen** op **Download weekend.mcpb**. Het bestand bevat het adres van deze omgeving en geen token; iedereen kan hetzelfde bestand gebruiken.
+2. Open in Claude Desktop **Instellingen > Extensies > Geavanceerde instellingen**, klik op **Extensie installeren** en kies het bestand. Dubbelklikken op het bestand werkt niet: Claude Desktop koppelt zich niet aan het bestandstype.
+3. In het eerste gesprek dat Weekend gebruikt, opent je browser deze omgeving. Log in als dat gevraagd wordt, kies de rechten (zie stap 5 hierboven) en klik op **Toestaan**. Het tabblad meldt **Gekoppeld**; je kunt het sluiten.
+4. De koppeling blijft bewaard in `.weekend/oauth.json` in je persoonlijke map en vernieuwt zichzelf. In **Gekoppelde apps** staat ze als *Claude Desktop (naam van je computer)*.
+5. Claude Desktop leest de tools alleen bij het starten. Sluit hem na een update van Weekend of van de extensie helemaal af (systeemvak of menubalk > **Afsluiten**) en start hem opnieuw. Een nieuwe versie van de extensie installeer je over de oude heen.
+
+Lukt het verbinden niet, kijk dan in de logbestanden van Claude Desktop (Windows `%APPDATA%\Claude\logs`, macOS `~/Library/Logs/Claude`) naar regels die met `weekend:` beginnen. *cannot reach ...* betekent dat je computer de omgeving niet bereikt: staat de VPN aan?
+
 **Claude Code**
+
+Claude Code draait op je eigen computer en werkt dus ook met een omgeving die alleen via een VPN bereikbaar is.
+
 
 1. Voer uit: `claude mcp add --transport http weekend https://weekend.example.com/api/mcp`
 2. Start Claude Code, typ `/mcp`, kies `weekend` en daarna **Authenticate**. Je browser opent dezelfde toestemmingspagina.

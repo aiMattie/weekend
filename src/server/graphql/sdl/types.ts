@@ -40,6 +40,8 @@ export const typesSdl = /* GraphQL */ `
     name: String!
     kind: WorkspaceKind
     description: String
+    """Weekend extension: group shown in the workspace switcher."""
+    category: String
     state: State
     created_at: ISO8601DateTime
     is_default_workspace: Boolean

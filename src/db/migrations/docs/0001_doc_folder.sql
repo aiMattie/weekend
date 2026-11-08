@@ -1,0 +1,1 @@
+ALTER TABLE `docs` ADD `folder_id` text REFERENCES folders(id) ON DELETE set null;

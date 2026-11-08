@@ -55,6 +55,7 @@ export const en: Record<MessageKey, string> = {
   "shell.workspaces": "Workspaces",
   "shell.addBoard": "Add board",
   "shell.addFolder": "Add folder",
+  "shell.addDoc": "Add doc",
   "shell.addWorkspace": "Add workspace",
   "shell.newBoardName": "New board",
   "shell.newFolderName": "New folder",

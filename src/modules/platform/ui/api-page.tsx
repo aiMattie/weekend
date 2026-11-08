@@ -49,7 +49,7 @@ export function ApiPage(props: PlatformProps) {
         </>
       )}
       {current === "explorer" && <ExplorerPanel baseUrl={props.baseUrl} firstBoardId={props.firstBoardId} />}
-      {current === "mcp" && <><ConnectedApps baseUrl={props.baseUrl} apps={props.connectedApps} workspaces={props.workspaces} /><McpPanel baseUrl={props.baseUrl} tools={props.tools} /></>}
+      {current === "mcp" && <><ConnectedApps baseUrl={props.baseUrl} options={props.claudeConnect} apps={props.connectedApps} workspaces={props.workspaces} /><McpPanel baseUrl={props.baseUrl} tools={props.tools} /></>}
       {current === "webhooks" && props.isAdmin && <div data-testid="platform-webhooks"><WebhooksSection boards={props.boards} /></div>}
       {current === "calls" && <CallsPanel />}
     </>

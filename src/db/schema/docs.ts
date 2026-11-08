@@ -4,7 +4,7 @@
  */
 import { index, integer, primaryKey, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 import { createdAt, idPk, json, updatedAt } from "./_helpers";
-import { boards, items, notifications, users, workspaces } from "./core";
+import { boards, folders, items, notifications, users, workspaces } from "./core";
 
 /** Tiptap / ProseMirror JSON document. */
 export interface DocJson { type: "doc"; content?: Record<string, unknown>[] }
@@ -18,6 +18,8 @@ export const docs = sqliteTable(
     itemId: text("item_id").references(() => items.id, { onDelete: "cascade" }),
     boardId: text("board_id").references(() => boards.id, { onDelete: "cascade" }),
     columnId: text("column_id"),
+    /** folder in the workspace tree (workspace docs only); null = workspace root */
+    folderId: text("folder_id").references(() => folders.id, { onDelete: "set null" }),
     title: text("title").notNull().default("Naamloos document"),
     blocks: json<DocJson>("blocks").notNull().default({ type: "doc", content: [] }),
     /** cover: image url or "#rrggbb" */
