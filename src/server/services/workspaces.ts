@@ -8,7 +8,7 @@ import { newId } from "../../lib/id";
 import { assertCan, can, workspaceVisibilityFilter } from "../../lib/permissions";
 import { idSchema, nameSchema } from "../../lib/zod-schemas";
 import { db } from "../../db/client";
-import { boards, users, workspaceMembers, workspaces } from "../../db/schema/core";
+import { boards, users, workspaceFavorites, workspaceMembers, workspaces } from "../../db/schema/core";
 import { emit } from "../../lib/events";
 import { computePosition, parse } from "./_shared";
 
@@ -145,6 +145,24 @@ export function move(actor: Actor, id: string, spec: { beforeId?: string; afterI
   const ws = db.update(workspaces).set({ position: computePosition(siblings, spec) }).where(eq(workspaces.id, id)).returning().get();
   wsEvent(actor);
   return ws;
+}
+
+/** Ids of the workspaces the actor starred (per user; shown first in the switcher). */
+export function listFavoriteIds(actor: Actor): string[] {
+  return db.select({ id: workspaceFavorites.workspaceId }).from(workspaceFavorites)
+    .where(eq(workspaceFavorites.userId, actor.id)).all().map((r) => r.id);
+}
+
+/** Stars or unstars a workspace for the actor. Returns the new favorite state. */
+export function toggleFavorite(actor: Actor, id: string): boolean {
+  get(actor, parse(idSchema, id));
+  const key = and(eq(workspaceFavorites.userId, actor.id), eq(workspaceFavorites.workspaceId, id));
+  if (db.select().from(workspaceFavorites).where(key).get()) {
+    db.delete(workspaceFavorites).where(key).run();
+    return false;
+  }
+  db.insert(workspaceFavorites).values({ userId: actor.id, workspaceId: id }).run();
+  return true;
 }
 
 export type WorkspaceMember = { userId: string; role: "owner" | "member" | "viewer"; name: string; email: string };

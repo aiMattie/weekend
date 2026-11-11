@@ -71,6 +71,7 @@ export function useSidebarActions(onWorkspaceCreated: (id: string) => void) {
     deleteBoard: (id: string, name: string) => confirm(t("chrome.deleteTitle"), t("chrome.deleteMessage", { name }), t("common.delete"), async () => { await deleteBoard(id); router.push("/"); }),
     deleteFolder: (id: string, name: string) => confirm(t("chrome.deleteFolderTitle"), t("chrome.deleteFolderMessage", { name }), t("common.delete"), async () => { await api.del(`/api/v1/folders/${id}`); }),
     toggleFavorite: (id: string) => run(async () => { await toggleFavorite(id); }),
+    toggleWorkspaceFavorite: (id: string) => run(async () => { await api.post(`/api/v1/workspaces/${id}/favorite`, {}); }),
     copyLink: (id: string) => copyText(absoluteBoardUrl(id)),
     newDoc: (workspaceId: string, folderId?: string | null) => run(async () => {
       const d = await api.post<{ id: string }>("/api/v1/docs", { workspaceId, folderId: folderId ?? null, title: t("docs.untitled") });

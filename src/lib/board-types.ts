@@ -75,4 +75,4 @@ export interface NavFolder { id: string; workspaceId: string; parentFolderId: st
 export interface NavWorkspace { id: string; name: string; kind: "open" | "closed"; color: string | null; icon: string | null; category: string | null; logoUrl: string | null }
 /** A workspace doc (not an item doc) in the sidebar tree. */
 export interface NavDoc { id: string; title: string; workspaceId: string; folderId: string | null; icon: string | null }
-export interface NavData { workspaces: NavWorkspace[]; folders: NavFolder[]; boards: NavBoard[]; docs: NavDoc[]; favorites: string[] }
+export interface NavData { workspaces: NavWorkspace[]; folders: NavFolder[]; boards: NavBoard[]; docs: NavDoc[]; favorites: string[]; workspaceFavorites: string[] }

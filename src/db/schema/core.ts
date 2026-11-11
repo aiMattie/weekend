@@ -1,6 +1,6 @@
 /**
  * CORE schema (module F / foundation): accounts, users, teams, workspaces, folders, boards,
- * groups, columns, items, updates, assets, activity_log, notifications, views, favorites.
+ * groups, columns, items, updates, assets, activity_log, notifications, views, favorites, workspace_favorites.
  *
  * Owned by `foundation`. Other modules put their tables in their own schema file and may only
  * REFERENCE these tables. Changing a core table = additive migration, coordinate with the lead.
@@ -347,4 +347,15 @@ export const favorites = sqliteTable(
     createdAt: createdAt(),
   },
   (t) => [primaryKey({ columns: [t.userId, t.boardId] })],
+);
+
+/** Per-user starred workspaces: shown first (alphabetically) in the workspace switcher. */
+export const workspaceFavorites = sqliteTable(
+  "workspace_favorites",
+  {
+    userId: text("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+    workspaceId: text("workspace_id").notNull().references(() => workspaces.id, { onDelete: "cascade" }),
+    createdAt: createdAt(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.workspaceId] })],
 );

@@ -22,6 +22,22 @@ describe("workspace category", () => {
   });
 });
 
+describe("workspace favorites", () => {
+  it("toggles per user and is exposed in nav data", () => {
+    const ws = workspaces.create(c.admin, { name: "Acme" });
+    expect(getNavData(c.admin).workspaceFavorites).toEqual([]);
+    expect(workspaces.toggleFavorite(c.admin, ws.id)).toBe(true);
+    expect(getNavData(c.admin).workspaceFavorites).toEqual([ws.id]);
+    expect(workspaces.listFavoriteIds(c.member)).toEqual([]);
+    expect(workspaces.toggleFavorite(c.admin, ws.id)).toBe(false);
+    expect(getNavData(c.admin).workspaceFavorites).toEqual([]);
+  });
+
+  it("rejects unknown workspaces", () => {
+    expect(() => workspaces.toggleFavorite(c.admin, "nope")).toThrow();
+  });
+});
+
 describe("groupWorkspaces", () => {
   const list = [
     { id: "1", name: "Delivery", category: null },
@@ -31,14 +47,29 @@ describe("groupWorkspaces", () => {
     { id: "5", name: "Support", category: "" },
   ];
 
-  it("groups case-insensitively, puts Klanten first, sorts the rest and puts uncategorised last, keeping order within a group", () => {
+  it("groups case-insensitively, puts Klanten first, sorts the rest and puts uncategorised last, alphabetical within a group", () => {
     expect(groupWorkspaces([...list, { id: "6", name: "Archief", category: "Archief" }]).map((g) => [g.category, g.workspaces.map((w) => w.id)])).toEqual([
-      ["Klanten", ["2", "4"]],
+      ["Klanten", ["4", "2"]],
       ["Archief", ["6"]],
       ["Intern", ["3"]],
       [null, ["1", "5"]],
     ]);
     expect(workspaceCategories(list)).toEqual(["Klanten", "Intern"]);
+  });
+
+  it("puts starred workspaces in their own alphabetical group at the top, out of their category", () => {
+    const groups = groupWorkspaces(list, ["5", "2"]);
+    expect(groups.map((g) => [g.favorite ?? false, g.category, g.workspaces.map((w) => w.id)])).toEqual([
+      [true, null, ["2", "5"]],
+      [false, "klanten", ["4"]],
+      [false, "Intern", ["3"]],
+      [false, null, ["1"]],
+    ]);
+  });
+
+  it("sorts a flat list alphabetically, case-insensitively", () => {
+    const flat = ["Main workspace", "Delivery", "adjust", "Cookinglife", "Carrier API", "Bouwbrain"].map((name, i) => ({ id: String(i), name, category: null }));
+    expect(groupWorkspaces(flat)[0].workspaces.map((w) => w.name)).toEqual(["adjust", "Bouwbrain", "Carrier API", "Cookinglife", "Delivery", "Main workspace"]);
   });
 
   it("returns one uncategorised group when nothing has a category", () => {
