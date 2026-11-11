@@ -63,6 +63,7 @@ export function getNavData(actor: Actor): NavData {
     docs: docsService.list(actor, { limit: 500 }).filter((d) => !d.itemId).sort((a, b) => a.position - b.position || a.title.localeCompare(b.title, "nl"))
       .map((d) => ({ id: d.id, title: d.title, workspaceId: d.workspaceId, folderId: d.folderId, icon: d.icon })),
     favorites: boards.listFavorites(actor).map((b) => b.id),
+    workspaceFavorites: workspaces.listFavoriteIds(actor),
   };
 }
 

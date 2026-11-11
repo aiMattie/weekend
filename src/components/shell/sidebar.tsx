@@ -65,12 +65,14 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
   const select = (id: string) => setStored(id);
   const actions = useSidebarActions(select);
   const ws = nav.workspaces.find((w) => w.id === selectedId) ?? null;
-  // Workspaces grouped by category (alphabetical, uncategorised last); a flat list when nobody uses categories.
-  const wsGroups = groupWorkspaces(nav.workspaces);
-  const hasCategories = wsGroups.some((g) => g.category);
+  // Starred workspaces first, then by category (uncategorised last), alphabetical within each group;
+  // a flat alphabetical list when nobody uses favorites or categories.
+  const wsFavorites = nav.workspaceFavorites ?? [];
+  const wsGroups = groupWorkspaces(nav.workspaces, wsFavorites);
+  const hasHeaders = wsGroups.some((g) => g.category || g.favorite);
   const workspaceMenu: MenuEntry[] = wsGroups.flatMap((g, i) => [
     ...(i > 0 ? [{ key: `ws-divider-${i}`, divider: true }] : []),
-    ...(hasCategories ? [{ key: `ws-group-${i}`, title: g.category ?? t("chrome.wsCategoryNone") }] : []),
+    ...(hasHeaders ? [{ key: `ws-group-${i}`, title: g.favorite ? t("shell.favorites") : g.category ?? t("chrome.wsCategoryNone") }] : []),
     ...g.workspaces.map((w) => ({ key: w.id, label: w.name, icon: <WsBadge name={w.name} color={w.color} logoUrl={w.logoUrl} />, active: w.id === ws?.id, testId: `workspace-option-${w.name}`, onClick: () => select(w.id) })),
   ]);
   const activeBoardId = /^\/boards\/(\d+)/.exec(pathname)?.[1] ?? null;
@@ -79,6 +81,7 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
 
   const wsMenuItems: MenuEntry[] = ws ? [
     { label: t("chrome.editWorkspace"), icon: <Edit size={16} />, testId: "workspace-menu-edit", onClick: () => actions.editWorkspace(ws.id) },
+    { label: wsFavorites.includes(ws.id) ? t("board.unfavorite") : t("board.favorite"), icon: <Favorite size={16} />, testId: "workspace-menu-favorite", onClick: () => actions.toggleWorkspaceFavorite(ws.id) },
     { label: t("shell.addFolder"), icon: <ClassicFolder size={16} />, testId: "workspace-menu-folder", onClick: () => actions.newFolder(ws.id) },
     { label: t("common.archive"), icon: <Archive size={16} />, testId: "workspace-menu-archive", onClick: () => actions.archiveWorkspace(ws.id, ws.name) },
     { label: t("common.delete"), icon: <Delete size={16} />, danger: true, testId: "workspace-menu-delete", onClick: () => actions.deleteWorkspace(ws.id, ws.name) },
