@@ -63,6 +63,9 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
     return candidates.find((id) => id && nav.workspaces.some((w) => w.id === id)) ?? null;
   }, [fromPath, stored, nav.workspaces]);
   const select = (id: string) => setStored(id);
+  // The workspace in the URL (board or workspace page) wins over the stored choice, so picking
+  // another workspace in the switcher has to navigate there, or nothing visibly changes.
+  const open = (id: string) => { select(id); if (id !== fromPath) router.push(`/workspaces/${id}`); };
   const actions = useSidebarActions(select);
   const ws = nav.workspaces.find((w) => w.id === selectedId) ?? null;
   // Starred workspaces first, then by category (uncategorised last), alphabetical within each group;
@@ -73,7 +76,7 @@ export function Sidebar({ nav, collapsed }: { nav: NavData; collapsed: boolean }
   const workspaceMenu: MenuEntry[] = wsGroups.flatMap((g, i) => [
     ...(i > 0 ? [{ key: `ws-divider-${i}`, divider: true }] : []),
     ...(hasHeaders ? [{ key: `ws-group-${i}`, title: g.favorite ? t("shell.favorites") : g.category ?? t("chrome.wsCategoryNone") }] : []),
-    ...g.workspaces.map((w) => ({ key: w.id, label: w.name, icon: <WsBadge name={w.name} color={w.color} logoUrl={w.logoUrl} />, active: w.id === ws?.id, testId: `workspace-option-${w.name}`, onClick: () => select(w.id) })),
+    ...g.workspaces.map((w) => ({ key: w.id, label: w.name, icon: <WsBadge name={w.name} color={w.color} logoUrl={w.logoUrl} />, active: w.id === ws?.id, testId: `workspace-option-${w.name}`, onClick: () => open(w.id) })),
   ]);
   const activeBoardId = /^\/boards\/(\d+)/.exec(pathname)?.[1] ?? null;
   const favorites = nav.favorites.map((id) => nav.boards.find((b) => b.id === id)).filter(Boolean) as NavData["boards"];
